@@ -8,9 +8,10 @@ const targets=new Set(['/ratings/dizayn-interera/moskva/','/ratings/dizayn-inter
 export function validate(input){
  if(!input||typeof input!=='object'||Array.isArray(input))throw Error('Неверный формат заявки.');
  const text=(key,max,required=false)=>{const v=input[key]??'';if(typeof v!=='string'||v.length>max||(required&&!v.trim()))throw Error('Проверьте поле: '+key);return v.trim();};
- const d={};for(const [k,max,req] of [['name',80,true],['phone',25,true],['email',180,false],['comment',2000,false],['brief',5000,false],['property',80,false],['location',150,false],['area',10,false],['budget',100,false],['start',100,false],['service',100,false],['audience',20,false],['studio',20,true],['page',150,true],['website',200,false],['requestId',50,true]])d[k]=text(k,max,req);
+ const d={};for(const [k,max,req] of [['name',80,true],['phone',25,true],['email',180,false],['comment',2000,false],['brief',5000,false],['property',80,false],['location',150,false],['area',10,false],['budget',100,false],['start',100,false],['service',100,false],['audience',20,false],['priceSegment',20,false],['studio',20,true],['page',150,true],['website',200,false],['requestId',50,true]])d[k]=text(k,max,req);
  if(d.name.length<2||!/^[-+0-9()\s]{7,25}$/.test(d.phone)||d.phone.replace(/\D/g,'').length<7)throw Error('Укажите имя и корректный телефон.');
  if(d.email&&!/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(d.email))throw Error('Проверьте электронную почту.');
+ if(input.transferConsent!==true)throw Error('Необходимо согласие на передачу заявки студиям.');
  if(input.consent!==true)throw Error('Необходимо согласие на обработку данных.');
  if(!targets.has(d.page)||!/^[0-9a-f-]{36}$/i.test(d.requestId))throw Error('Обновите страницу и повторите отправку.');
  const city=d.page.includes('voronezh')?'voronezh':'moskva';d.city=city;
@@ -19,9 +20,11 @@ export function validate(input){
  d.selected=Array.isArray(input.selected)?input.selected:[];
  if(d.selected.length>4||d.selected.some(id=>typeof id!=='string'||!studioList[id]))throw Error('Проверьте список выбранных студий.');
  if(d.studio==='brief'){
-  if(!['home','business','selected'].includes(d.audience)||d.brief.length<20||!d.location||Number(d.area)<10||Number(d.area)>100000||!Number.isFinite(Number(d.area)))throw Error('Заполните площадь, город и подробное описание проекта.');
+  if(!['editorial','selected'].includes(d.audience)||d.brief.length<20||!d.location||Number(d.area)<10||Number(d.area)>100000||!Number.isFinite(Number(d.area)))throw Error('Заполните площадь, город и подробное описание проекта.');
   if(d.audience==='selected'&&!d.selected.length)throw Error('Выберите студии для сравнения.');
  }
+ if(d.studio==='brief'&&!['any','economy','middle','premium'].includes(d.priceSegment))throw Error('Выберите ценовой сегмент.');
+ if(d.studio!=='brief'){d.audience='selected';d.selected=[d.studio];}else if(d.audience==='editorial'){d.selected=[];}
  d.studioName=studioList[d.studio]||'Общий бриф';d.selectedNames=d.selected.map(id=>studioList[id]);return d;
 }
 export function letter(d,id){return [
@@ -29,9 +32,9 @@ export function letter(d,id){return [
  `Город рейтинга: ${d.city==='voronezh'?'Воронеж':'Москва'}`,`Страница: https://best-of-interiors.ru${d.page}`,
  `Студия: ${d.studioName} (${d.studio})`,`Имя: ${d.name}`,`Телефон: ${d.phone}`,`Email: ${d.email||'Не указан'}`,
  `Тип объекта: ${d.property}`,`Площадь: ${d.area}`,`Город / ЖК: ${d.location}`,`Бюджет: ${d.budget}`,`Начало: ${d.start}`,`Услуги: ${d.service}`,
- `Направление: ${d.audience}`,`Выбранные студии: ${d.selectedNames.join(', ')||'Не выбраны'}`,
+ `Подбор: ${d.audience==='editorial'?'Редакцией под задачу и бюджет':'Конкретные студии'}`,`Сегмент: ${{any:'От эконома до премиума с учётом бюджета',economy:'Эконом',middle:'Средний',premium:'Премиум'}[d.priceSegment]||'Не указан'}`,`Выбранные студии: ${d.selectedNames.join(', ')||'Не выбраны'}`,
  `\nОписание проекта:\n${d.brief||d.comment||'Не указано'}`,
- '\nСогласие на обработку данных: дано. Версия: 2026-10-09. Получатель заявки — редакция Best of Interiors. Автоматическая рассылка студиям не выполнялась.'
+ '\nСогласие на обработку данных: дано. Согласие на передачу выбранным клиентом или редакцией студиям для КП: дано. Версия: 2026-10-09-v2. Получатель заявки — редакция Best of Interiors. Автоматическая рассылка студиям не выполнялась.'
  ].join('\n');}
 export function createHandler(send,{maxPerWindow=5,maxGlobal=40}={}){
  const rates=new Map(),requests=new Map();let globalCount=0,globalUntil=Date.now()+3600000;

@@ -3,11 +3,11 @@ import assert from 'node:assert/strict';
 import http from 'node:http';
 import {randomUUID} from 'node:crypto';
 import {validate,letter,createHandler} from './server.mjs';
-const sample=()=>({requestId:randomUUID(),name:'Тест сайта',phone:'+70000000000',email:'test@example.com',studio:'MSK006',page:'/ratings/dizayn-interera/moskva/',consent:true,comment:'Тестовая заявка'});
+const sample=()=>({requestId:randomUUID(),name:'Тест сайта',phone:'+70000000000',email:'test@example.com',studio:'MSK006',page:'/ratings/dizayn-interera/moskva/',consent:true,transferConsent:true,comment:'Тестовая заявка'});
 test('validates consent, city and fields; preserves complete brief',()=>{
  assert.equal(validate(sample()).studioName,'Alina Salomatina');
- for(const change of [{consent:false},{phone:'abc'},{email:'bad\r\nBcc: a@b.ru'},{studio:'VRN004'},{page:'https://evil.test'},{comment:'x'.repeat(2001)}])assert.throws(()=>validate({...sample(),...change}));
- const d=validate({...sample(),studio:'brief',area:'85',location:'Москва',brief:'Подробное описание задачи для проверки отправки',audience:'selected',selected:['MSK006'],property:'Квартира',budget:'3–7 млн ₽'});
+ for(const change of [{transferConsent:false},{consent:false},{phone:'abc'},{email:'bad\r\nBcc: a@b.ru'},{studio:'VRN004'},{page:'https://evil.test'},{comment:'x'.repeat(2001)}])assert.throws(()=>validate({...sample(),...change}));
+ const d=validate({...sample(),studio:'brief',area:'85',location:'Москва',brief:'Подробное описание задачи для проверки отправки',audience:'selected',priceSegment:'any',selected:['MSK006'],property:'Квартира',budget:'3–7 млн ₽'});
  assert.match(letter(d,'test'),/85/);assert.match(letter(d,'test'),/Подробное описание/);assert.match(letter(d,'test'),/Alina Salomatina/);
 });
 async function fixture(t,send,options){const server=http.createServer(createHandler(send,options));await new Promise(r=>server.listen(0,'127.0.0.1',r));t.after(()=>server.close());const url=`http://127.0.0.1:${server.address().port}/leads`;return(data,origin='https://best-of-interiors.ru')=>fetch(url,{method:'POST',headers:{Origin:origin,'Content-Type':'application/json'},body:JSON.stringify(data)});}
@@ -27,4 +27,12 @@ test('Yandex adapter handles preflight, base64 body and trusted source IP',async
  assert.equal((await handler({headers,httpMethod:'OPTIONS'})).statusCode,204);
  const result=await handler({headers,httpMethod:'POST',isBase64Encoded:true,body:Buffer.from(JSON.stringify(sample())).toString('base64'),requestContext:{identity:{sourceIp:'127.0.0.1'}}});
  assert.equal(result.statusCode,200);assert.equal(sent,1);assert.equal(result.headers['Access-Control-Allow-Origin'],headers.Origin);
+});
+
+test('editorial selection records segment and never forwards stale selected studios',()=>{
+ const brief={...sample(),studio:'brief',area:'85',location:'Москва',brief:'Нужен проект квартиры с сопровождением',audience:'editorial',priceSegment:'premium',selected:['MSK006']};
+ const d=validate(brief);assert.deepEqual(d.selected,[]);assert.match(letter(d,'test'),/Премиум/);assert.match(letter(d,'test'),/Согласие на передачу/);
+ assert.throws(()=>validate({...brief,priceSegment:'invalid'}));
+ assert.throws(()=>validate({...brief,audience:'selected',selected:[]}));
+ assert.deepEqual(validate({...sample(),selected:[]}).selected,['MSK006']);
 });

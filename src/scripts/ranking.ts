@@ -91,25 +91,43 @@ function openLead(id?:string,fromCompare=false){
  $<HTMLInputElement>('#lead-studio').value=studio?.id||'brief';
  $('#lead-title').textContent=quiz?'Ваш проект. Один бриф.':'Познакомимся поближе?';
  $('#lead-recipient').textContent=studio?`Персональное предложение от ${studio.dataset.name}`:'Опишите задачу, чтобы сравнивать предложения на одинаковых условиях.';
- $<HTMLSelectElement>('#brief-audience').value=fromCompare?'selected':'home';
- if(fromCompare)$('#audience-note').textContent='Вы выбрали: '+cards.filter(c=>selected.has(c.id)).map(c=>c.dataset.name).join(', ')+'. Заявка поступит редакции.';
- else $('#audience-note').textContent='Выбор попадёт в заявку редакции. Автоматическая рассылка по всем студиям не выполняется.';
+ $<HTMLSelectElement>('#brief-audience').value=fromCompare?'selected':'editorial';
+ requestStudios.clear();if(fromCompare)selected.forEach(id=>requestStudios.add(id));renderStudioPicker();updateAudience();
  showStep();lead.showModal();
 }
 document.querySelectorAll<HTMLButtonElement>('[data-lead]').forEach(button=>button.addEventListener('click',()=>openLead(button.dataset.lead)));
 document.querySelectorAll<HTMLButtonElement>('[data-quiz]').forEach(button=>button.addEventListener('click',()=>openLead()));
-$('#brief-audience').addEventListener('change',()=>{const value=$<HTMLSelectElement>('#brief-audience').value;$('#audience-note').textContent=value==='selected'?(selected.size?'Вы выбрали: '+cards.filter(c=>selected.has(c.id)).map(c=>c.dataset.name).join(', ')+'. Заявка поступит редакции.':'Добавьте студии в сравнение или выберите другое направление.'):'Выбор попадёт в заявку редакции. Автоматическая рассылка по всем студиям не выполняется.';});
+const requestStudios=new Set<string>();
+function updateAudience(){
+ const custom=$<HTMLSelectElement>('#brief-audience').value==='selected';
+ $('#studio-picker').hidden=!custom;
+ const names=cards.filter(c=>requestStudios.has(c.id)).map(c=>c.dataset.name).join(', ');
+ const message=custom?(names?`Получатели после обработки редакцией: ${names}.`:'Выберите студии ниже.'):'Редакция подберёт студии под вашу задачу и бюджет и передаст им заявку для подготовки КП.';
+ $('#audience-note').textContent=message;
+ $('#recipient-summary').textContent=quiz?message:`После обработки редакцией заявка будет передана ${cards.find(c=>c.id===$<HTMLInputElement>('#lead-studio').value)?.dataset.name||'выбранной студии'}.`;
+}
+function renderStudioPicker(){
+ const list=$('#studio-picker-list');list.replaceChildren();
+ const query=$<HTMLInputElement>('#studio-picker-search').value.trim().toLocaleLowerCase();
+ cards.filter(c=>c.dataset.name!.toLocaleLowerCase().includes(query)).forEach(card=>{
+  const label=document.createElement('label'),input=document.createElement('input');input.type='checkbox';input.checked=requestStudios.has(card.id);
+  input.addEventListener('change',()=>{if(input.checked&&requestStudios.size>=4){input.checked=false;$('#form-error').textContent='Можно выбрать до 4 студий.';return;}input.checked?requestStudios.add(card.id):requestStudios.delete(card.id);$('#form-error').textContent='';updateAudience();});
+  label.append(input,document.createTextNode(card.dataset.name!));list.append(label);
+ });
+}
+$('#studio-picker-search').addEventListener('input',renderStudioPicker);
+$('#brief-audience').addEventListener('change',updateAudience);
 $('#compare-brief').addEventListener('click',()=>{compare.close();openLead(undefined,true);});
 function validStep(){
  const fields=[...form.querySelectorAll<HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement>(`[data-step="${step}"] input,[data-step="${step}"] select,[data-step="${step}"] textarea`)];
  const invalid=fields.find(field=>!field.disabled&&!field.checkValidity());if(invalid){invalid.reportValidity();return false;}
- if(quiz&&step===1&&$<HTMLSelectElement>('#brief-audience').value==='selected'&&!selected.size){$('#form-error').textContent='Сначала добавьте студии в сравнение или выберите другое направление.';return false;}
+ if(quiz&&step===1&&$<HTMLSelectElement>('#brief-audience').value==='selected'&&!requestStudios.size){$('#form-error').textContent='Выберите хотя бы одну студию или доверьте подбор редакции.';return false;}
  if(step===2){const phone=$<HTMLInputElement>('[name=phone]');if(phone.value.replace(/\D/g,'').length<7||!/^[-+0-9()\s]+$/.test(phone.value)){$('#form-error').textContent='Укажите телефон: не менее 7 цифр.';phone.focus();return false;}}
  return true;
 }
 $('#quiz-next').addEventListener('click',()=>{if(validStep()){step++;showStep();form.querySelector<HTMLElement>(`[data-step="${step}"] input,[data-step="${step}"] textarea`)?.focus();}});
 $('#quiz-back').addEventListener('click',()=>{step--;showStep();});
-form.addEventListener('submit',event=>{event.preventDefault();if(quiz&&step<2){if(validStep()){step++;showStep();}return;}if(!validStep())return;form.dispatchEvent(new CustomEvent('lead:submit',{detail:{selected:quiz&&$<HTMLSelectElement>('#brief-audience').value==='selected'?[...selected]:[]}}));});
+form.addEventListener('submit',event=>{event.preventDefault();if(quiz&&step<2){if(validStep()){step++;showStep();}return;}if(!validStep())return;form.dispatchEvent(new CustomEvent('lead:submit',{detail:{selected:quiz&&$<HTMLSelectElement>('#brief-audience').value==='selected'?[...requestStudios]:[]}}));});
 [lead,compare].forEach(dialog=>{dialog.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>dialog.close()));dialog.addEventListener('click',e=>{if(e.target!==dialog)return;const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close();});});
 lead.addEventListener('close',()=>form.reset());
 

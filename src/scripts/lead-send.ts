@@ -12,7 +12,7 @@ if(form){
   // Earlier quiz steps are disabled only for browser validation; include their answers.
   const disabled=[...form.querySelectorAll<HTMLFieldSetElement>('fieldset:disabled')];disabled.forEach(f=>f.disabled=false);
   const data=Object.fromEntries(new FormData(form).entries());disabled.forEach(f=>f.disabled=true);
-  const payload={...data,consent:data.consent==='on',selected,requestId,page:location.pathname};
+  const payload={...data,consent:data.consent==='on',transferConsent:data.transferConsent==='on',selected,requestId,page:location.pathname};
   sending=true;const submit=document.querySelector<HTMLButtonElement>('#lead-submit')!;submit.disabled=true;submit.textContent='Отправляем…';error.textContent='';
   try{
    const response=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),signal:AbortSignal.timeout(30000)});
