@@ -14,4 +14,4 @@
 
 GitHub: https://github.com/knsemykin/best-of-interiors.ru
 Timeweb project: https://timeweb.cloud/my/projects/3017763
-App Platform: форма настроена, заказ не подтверждён. Нужно согласие на тариф 1 руб./мес плюс запросы.
+App Platform: тариф согласован пользователем. Приложение 267437 создано в проекте 3017763. Сборка 97f448b успешна, статус «В сети». Node.js 24, npm run build, /dist. Технический адрес https://knsemykin-best-of-interiors-ru-2cea.twc1.net — на момент проверки DNS возвращает NXDOMAIN, поэтому внешняя HTTP-проверка не завершена. Основной домен best-of-interiors.ru не подключён. Изменения после 97f448b затрагивают только документацию и .gitignore.
