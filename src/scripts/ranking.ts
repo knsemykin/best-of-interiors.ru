@@ -92,13 +92,13 @@ function openLead(id?:string,fromCompare=false){
  $('#lead-title').textContent=quiz?'Ваш проект. Один бриф.':'Познакомимся поближе?';
  $('#lead-recipient').textContent=studio?`Персональное предложение от ${studio.dataset.name}`:'Опишите задачу, чтобы сравнивать предложения на одинаковых условиях.';
  $<HTMLSelectElement>('#brief-audience').value=fromCompare?'selected':'home';
- if(fromCompare)$('#audience-note').textContent='Вы выбрали: '+cards.filter(c=>selected.has(c.id)).map(c=>c.dataset.name).join(', ')+'. Сейчас отправка отключена.';
- else $('#audience-note').textContent='В рабочей версии перед отправкой будут показаны конкретные получатели. Сейчас это пример сценария.';
+ if(fromCompare)$('#audience-note').textContent='Вы выбрали: '+cards.filter(c=>selected.has(c.id)).map(c=>c.dataset.name).join(', ')+'. Заявка поступит редакции.';
+ else $('#audience-note').textContent='Выбор попадёт в заявку редакции. Автоматическая рассылка по всем студиям не выполняется.';
  showStep();lead.showModal();
 }
 document.querySelectorAll<HTMLButtonElement>('[data-lead]').forEach(button=>button.addEventListener('click',()=>openLead(button.dataset.lead)));
 document.querySelectorAll<HTMLButtonElement>('[data-quiz]').forEach(button=>button.addEventListener('click',()=>openLead()));
-$('#brief-audience').addEventListener('change',()=>{const value=$<HTMLSelectElement>('#brief-audience').value;$('#audience-note').textContent=value==='selected'?(selected.size?'Вы выбрали: '+cards.filter(c=>selected.has(c.id)).map(c=>c.dataset.name).join(', ')+'. Отправка отключена.':'Добавьте студии в сравнение или выберите другое направление.'):'В рабочей версии перед отправкой будут показаны конкретные получатели. Сейчас это пример сценария.';});
+$('#brief-audience').addEventListener('change',()=>{const value=$<HTMLSelectElement>('#brief-audience').value;$('#audience-note').textContent=value==='selected'?(selected.size?'Вы выбрали: '+cards.filter(c=>selected.has(c.id)).map(c=>c.dataset.name).join(', ')+'. Заявка поступит редакции.':'Добавьте студии в сравнение или выберите другое направление.'):'Выбор попадёт в заявку редакции. Автоматическая рассылка по всем студиям не выполняется.';});
 $('#compare-brief').addEventListener('click',()=>{compare.close();openLead(undefined,true);});
 function validStep(){
  const fields=[...form.querySelectorAll<HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement>(`[data-step="${step}"] input,[data-step="${step}"] select,[data-step="${step}"] textarea`)];
@@ -109,7 +109,7 @@ function validStep(){
 }
 $('#quiz-next').addEventListener('click',()=>{if(validStep()){step++;showStep();form.querySelector<HTMLElement>(`[data-step="${step}"] input,[data-step="${step}"] textarea`)?.focus();}});
 $('#quiz-back').addEventListener('click',()=>{step--;showStep();});
-form.addEventListener('submit',event=>{event.preventDefault();if(quiz&&step<2){if(validStep()){step++;showStep();}return;}if(!validStep())return;form.hidden=true;$('#lead-result').hidden=false;$('#lead-result').focus();});
+form.addEventListener('submit',event=>{event.preventDefault();if(quiz&&step<2){if(validStep()){step++;showStep();}return;}if(!validStep())return;form.dispatchEvent(new CustomEvent('lead:submit',{detail:{selected:quiz&&$<HTMLSelectElement>('#brief-audience').value==='selected'?[...selected]:[]}}));});
 [lead,compare].forEach(dialog=>{dialog.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>dialog.close()));dialog.addEventListener('click',e=>{if(e.target!==dialog)return;const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close();});});
 lead.addEventListener('close',()=>form.reset());
 
