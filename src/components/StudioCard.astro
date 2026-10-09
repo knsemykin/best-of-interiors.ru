@@ -2,15 +2,15 @@
 import allPortfolios from '../data/promo-portfolios.json';
 const portfolios = allPortfolios.filter(p=>p.id==='MSK006');
 import {criteria,evidence,projects,price,score,labels,type Studio} from '../data/moscow';
-const {studio:s}=Astro.props as {studio:Studio};
-const promo=portfolios.find(p=>p.id===s.studio_id);
-const sources=evidence.filter(e=>e.studio_id===s.studio_id);
-const work=projects.filter(p=>p.studio_id===s.studio_id);
+const {studio:s,evidenceData=evidence,projectData=projects,criteriaData=criteria,promoStudioId,kind}=Astro.props;
+const promo=portfolios.find(p=>p.id===(promoStudioId||s.studio_id));
+const sources=evidenceData.filter(e=>e.studio_id===s.studio_id);
+const work=projectData.filter(p=>p.studio_id===s.studio_id);
 const residential=s.segment==='Жилые интерьеры';
 const aliases:Record<string,string>={MSK006:'Алина Саломатина Саламатина',MSK005:'Хот Волс Хотволс Хот Уоллс',MSK001:'Впроекте В проекте'};
 const known=(v:string|null)=>v==='Заявлено';
 ---
-<article class="studio-card" id={s.studio_id} data-studio data-name={s.name} data-segment={residential?'home':'business'} data-score={s.score} data-price={s.design_currency==='RUB'?s.design_rub_m2_from||'':''} data-office={s.region_model.includes('офис заявлен')?'local':'other'} data-search={[s.name,aliases[s.studio_id],s.styles_mentioned,s.residential_complexes,s.office_address].filter(Boolean).join(' ')} data-supervision={String(known(s.author_supervision))} data-procurement={String(known(s.procurement))} data-renovation={String(known(s.renovation_service))}>
+<article class="studio-card" id={s.studio_id} data-studio data-name={s.name} data-kind={kind} data-segment={residential?'home':'business'} data-score={s.score} data-price={s.design_currency==='RUB'?s.design_rub_m2_from||'':''} data-office={/офис.*заявлен/i.test(s.region_model)?'local':'other'} data-search={[s.name,aliases[s.studio_id],s.styles_mentioned,s.residential_complexes,s.office_address].filter(Boolean).join(' ')} data-supervision={String(known(s.author_supervision))} data-procurement={String(known(s.procurement))} data-renovation={String(known(s.renovation_service))}>
  <div class="studio-main"><div class="studio-heading"><span class="rank-number" title="Порядковый номер в основном списке">{String(s.listPosition).padStart(2,'0')}</span><div><span class="micro">{residential?'Студия дизайна интерьера':'КОММЕРЧЕСКИЕ / АРХИТЕКТУРА'}</span><h3><a href={`#${s.studio_id}`}>{s.name}</a></h3><p class="studio-location">{s.region_model}</p></div><button class="save-studio" data-save={s.studio_id} aria-pressed="false" aria-label={`Добавить ${s.name} в сравнение`}>＋</button></div>
  {s.yandex_rating&&<a class="yandex-rating" href={s.yandex_url} target="_blank" rel="noopener noreferrer">Яндекс · 5,0 <span>43 оценки · 09.10.2026 ↗</span></a>}<p class="studio-description">{s.usp_declared && !s.usp_declared.startsWith('Отдельное отличие') ? s.usp_declared : `${s.entity_type}. ${s.services || 'Состав услуг уточняется при знакомстве.'}`}</p>
  <div class="service-tags">{known(s.author_supervision)&&<span>Сопровождение</span>}{known(s.procurement)&&<span>Комплектация</span>}{known(s.renovation_service)&&<span>Реализация</span>}{known(s.working_drawings)&&<span>Чертежи</span>}</div>
@@ -19,5 +19,5 @@ const known=(v:string|null)=>v==='Заявлено';
 
  {promo&&<a class="portfolio-card-link" href={`/companies/${promo.slug}/`}>Портфолио и карточка студии <span>{promo.works.length} проектов ↗</span></a>}
  <details class="studio-details"><summary>Подробнее: цены, контакты и основания оценки <span aria-hidden="true">＋</span></summary><div class="details-grid"><div><h4>Перед знакомством</h4><p>Запросите состав услуг и расчёт стоимости под вашу площадь.</p><dl class="contact-list"><div><dt>Сайт</dt><dd>{s.website}</dd></div><div><dt>Телефон</dt><dd>{s.phone||'Уточните у студии'}</dd></div><div><dt>Офис</dt><dd>{s.office_address||'Уточните у студии'}</dd></div><div><dt>Команда</dt><dd>{s.team_size_declared||'Уточните у студии'}</dd></div><div><dt>Модель реализации</dt><dd>{known(s.renovation_service)?'Реализация проекта':'Уточните у студии'}</dd></div><div><dt>Закупки и заказы</dt><dd>{known(s.procurement)?'Комплектация проекта':'Уточните у студии'}</dd></div></dl>{work.length>0&&<><h4>ЖК в материалах компании</h4><ul class="source-list">{work.map(p=><li><a href={p.source_url} target="_blank" rel="noopener noreferrer">{p.residential_complex} ↗</a></li>)}</ul><p class="r-note">Это упоминания проектов, а не независимое подтверждение выполненного ремонта.</p></>}
- </div><div><h4>Из чего сложился индекс</h4><ol class="score-breakdown">{criteria.map(([name,weight],i)=><li><span>{name}</span><b>{score(s.criteria[i]*weight)} / {weight}</b></li>)}</ol><details class="evidence-details"><summary>Источники ({sources.length})</summary><ul class="source-list">{sources.map(e=><li><a href={e.source_url} target="_blank" rel="noopener noreferrer">{labels[e.field]||e.field} ↗</a><span>{e.checked_at}</span></li>)}</ul></details></div></div></details>
+ </div><div><h4>Из чего сложился индекс</h4><ol class="score-breakdown">{criteriaData.map(([name,weight],i)=><li><span>{name}</span><b>{score(s.criteria[i]*weight)} / {weight}</b></li>)}</ol><details class="evidence-details"><summary>Источники ({sources.length})</summary><ul class="source-list">{sources.map(e=><li><a href={e.source_url} target="_blank" rel="noopener noreferrer">{labels[e.field]||e.field} ↗</a><span>{e.checked_at}</span></li>)}</ul></details></div></div></details>
 </article>

@@ -15,6 +15,7 @@ function applyFilters(scroll=false){
  matches=cards.filter(card=>{
   const d=card.dataset, amount=Number(d.price||0);
   if(segment.value!=='all' && segment.value!==d.segment)return false;
+  const kind=document.querySelector<HTMLSelectElement>('#team-type');if(kind&&kind.value!=='all'&&kind.value!==d.kind)return false;
   if(office.value!=='all'&&office.value!==d.office)return false;
   if(terms.some(term=>!normalize(d.search||'').includes(term)))return false;
   if(budget.value==='known'&&!amount || budget.value==='unknown'&&amount)return false;
@@ -68,7 +69,7 @@ function renderComparison(){
  const chosen=cards.filter(c=>selected.has(c.id));
  chosen.forEach(card=>{const th=cell('th',card.dataset.name!);const remove=document.createElement('button');remove.textContent='Убрать из сравнения';remove.dataset.remove=card.id;remove.addEventListener('click',()=>{selected.delete(card.id);refreshSelection();renderComparison();});th.append(remove);row.append(th);});head.append(row);table.append(head);
  const body=document.createElement('tbody');
- const rows:[string,(c:HTMLElement)=>string][]=[['Направление',c=>c.dataset.segment==='home'?'Жилые интерьеры':'Бизнес / архитектура'],['Индекс сведений',c=>`${Number(c.dataset.score).toLocaleString('ru-RU')} / 100`],['Дизайн-проект',c=>c.querySelector('.studio-facts dd')?.textContent||'Уточнить'],['Офис',c=>c.querySelector('.studio-location')?.textContent||'Уточнить'],['Сопровождение',c=>c.dataset.supervision==='true'?'Заявлено':'Уточните у студии'],['Комплектация',c=>c.dataset.procurement==='true'?'Заявлено':'Уточните у студии'],['Реализация',c=>c.dataset.renovation==='true'?'Заявлено':'Уточните у студии']];
+ const rows:[string,(c:HTMLElement)=>string][]=[['Направление',c=>c.dataset.kind?({studio:'Студия / бюро',author:'Авторская команда',renovation:'Ремонт и дизайн'}[c.dataset.kind]||'Студия'):c.dataset.segment==='home'?'Жилые интерьеры':'Бизнес / архитектура'],['Индекс сведений',c=>`${Number(c.dataset.score).toLocaleString('ru-RU')} / 100`],['Дизайн-проект',c=>c.querySelector('.studio-facts dd')?.textContent||'Уточнить'],['Офис',c=>c.querySelector('.studio-location')?.textContent||'Уточнить'],['Сопровождение',c=>c.dataset.supervision==='true'?'Заявлено':'Уточните у студии'],['Комплектация',c=>c.dataset.procurement==='true'?'Заявлено':'Уточните у студии'],['Реализация',c=>c.dataset.renovation==='true'?'Заявлено':'Уточните у студии']];
  rows.forEach(([name,value])=>{const tr=document.createElement('tr');const th=cell('th',name);th.setAttribute('scope','row');tr.append(th);chosen.forEach(c=>tr.append(cell('td',value(c))));body.append(tr);});table.append(body);const wrapper=document.createElement('div');wrapper.className='compare-table-wrap';wrapper.append(table);container.append(wrapper);
 }
 $('#compare-open').addEventListener('click',()=>{renderComparison();compare.showModal();});

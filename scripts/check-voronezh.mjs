@@ -1,0 +1,20 @@
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+const data=JSON.parse(await readFile('src/data/voronezh-studios.json','utf8'));
+const html=await readFile('dist/ratings/dizayn-interera/voronezh/index.html','utf8');
+assert.equal(data.studios.length,45);
+for(const s of data.studios){assert.equal(s.score,s.criteria.reduce((sum,c,i)=>sum+c*data.weights[i],0));assert.equal(s.rank,1+data.studios.filter(o=>o.score>s.score).length);assert.ok(html.includes(`id="${s.studio_id}"`));}
+assert.equal((html.match(/data-studio /g)||[]).length,45);
+assert.equal((html.match(/class="promo-badge"/g)||[]).length,1);
+assert.ok(html.includes('data-lead="VRN004"'));
+assert.ok(!html.includes('data-lead="MSK006"'));
+assert.ok(html.includes('ТОП-45 лучших'));
+assert.ok(html.includes('data-kind="renovation"'));
+assert.ok(html.includes('content="index, follow, max-image-preview:large"'));
+assert.ok(html.includes("ym(113588974,'init'"));
+const schema=JSON.parse(html.match(/<script type="application\/ld\+json">(.*?)<\/script>/s)[1]);
+assert.deepEqual(schema['@graph'].filter(x=>x['@type']==='ItemList').map(x=>x.numberOfItems),[45]);
+assert.deepEqual([...html.matchAll(/class="rank-number"[^>]*>(\d+)</g)].map(m=>+m[1]),Array.from({length:45},(_,i)=>i+1));
+assert.ok(!html.includes('href="tel:'));
+assert.ok((await readFile('dist/sitemap.xml','utf8')).includes('/ratings/dizayn-interera/voronezh/'));
+console.log('PASS: Voronezh 45 original scores/ranks, unique numbering, sources, local promo lead, team filters, SEO, Metrika, sitemap.');
