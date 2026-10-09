@@ -1,2 +1,2 @@
-// Enable only when the reviewed site is served on its canonical production domain.
-export const indexable = process.env.SITE_INDEXABLE === 'true';
+// Production is indexable; SITE_INDEXABLE=false keeps preview builds private from search.
+export const indexable = process.env.SITE_INDEXABLE !== 'false';

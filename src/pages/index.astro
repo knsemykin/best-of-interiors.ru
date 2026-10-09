@@ -1,4 +1,5 @@
 ---
+import Metrika from "../components/Metrika.astro";
 import '@fontsource-variable/manrope';
 import '../styles/global.css';
 import { criteria as moscowCriteria } from '../data/moscow';
@@ -56,4 +57,4 @@ function openInfo(title:string,copy:string){document.querySelector('#dialog-titl
 document.querySelectorAll<HTMLButtonElement>('[data-category]').forEach(b=>b.addEventListener('click',()=>openInfo(b.dataset.category||'Рейтинг','Готовим первый рейтинг в этом направлении. Сначала соберём и проверим сведения о компаниях, затем покажем оценки, источники и контакты. Пока можно познакомиться с критериями выбора.')));
 document.querySelectorAll<HTMLButtonElement>('[data-info]').forEach(b=>b.addEventListener('click',()=>openInfo(b.dataset.info==='promo'?'Заметное промо. Прозрачные правила.':'Компаниям есть что рассказать',b.dataset.info==='promo'?'В рейтингах предусмотрен отдельный промоблок — до трёх компаний. Также планируем партнёрские статьи, врезки в карточках и предложения на главной. Порядок промо может быть платным; органический рейтинг рассчитывается отдельно. Приём заявок откроется после запуска.':'Вы сможете бесплатно передать подтверждения реализованных проектов, сведения об условиях, гарантиях и команде. Проверенные данные станут основанием для пересчёта оценки. Форма подачи появится вместе с первыми рейтингами.')));
 dialog?.querySelector('.dialog-close')?.addEventListener('click',()=>dialog.close());dialog?.querySelector('a')?.addEventListener('click',()=>dialog.close());dialog?.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close();}});
-</script></body></html>
+</script><Metrika/></body></html>

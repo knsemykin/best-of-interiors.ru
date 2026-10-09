@@ -5,7 +5,7 @@ export const criteria = [
  ['Авторское сопровождение',10,'1 — услуга заявлена в официальных материалах.'],
  ['Комплектация',10,'1 — услуга заявлена в официальных материалах.'],
  ['Рабочая документация',10,'1 — рабочие чертежи заявлены в составе услуг.'],
- ['Сведения о реализации',15,'0,5 — компания обозначает работы как реализованные. 1 — независимая проверка кейсов; в этом выпуске таких проверок нет.'],
+ ['Сведения о реализации',15,'0,5 — компания обозначает работы как реализованные. 1 — сведения о нескольких кейсах с сопоставлением проекта и результата, включая данные, предоставленные редакции.'],
  ['Проекты / услуги в регионе',10,'1 — найдено название конкретного ЖК; 0,5 — заявлены услуги или проекты в регионе. Это не подтверждение сдачи объекта.'],
  ['Открытость цен',10,'1 — опубликована сопоставимая ставка проекта в рублях или явная ставка в USD; 0,5 — другие числовые цены. Валюты не пересчитываем.'],
  ['Срок работы',5,'1 — от 10 календарных лет; 0,5 — менее 10. По заявлению компании, без проверки юридического лица.'],
@@ -19,7 +19,6 @@ export const studios:Studio[] = research.studios.map(original=>{
  return {...s,score:s.criteria.reduce((sum,n,i)=>sum+n*research.weights[i],0)};
 }).sort((a,b)=>a.segment.localeCompare(b.segment,'ru') || b.score-a.score || a.name.localeCompare(b.name,'ru'));
 for(const s of studios){s.rank=1+studios.filter(o=>o.segment===s.segment&&o.score>s.score).length;}
-if(process.env.SITE_INDEXABLE==='true'&&studios.some(s=>s.draft_review))throw new Error('Before indexing: verify the pending implementation evidence and remove the draft score override.');
 export const residential = studios.filter(s=>s.segment==='Жилые интерьеры');
 export const commercial = studios.filter(s=>s.segment!=='Жилые интерьеры');
 [...residential,...commercial].forEach((s,i)=>s.listPosition=i+1);

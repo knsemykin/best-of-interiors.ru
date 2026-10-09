@@ -12,18 +12,18 @@ for(const s of research.studios){
 }
 assert.equal((html.match(/data-studio /g)||[]).length,175);
 assert.equal((html.match(/<h1[ >]/g)||[]).length,1);
-assert.equal((html.match(/class="promo-badge"/g)||[]).length,3);
+assert.equal((html.match(/class="promo-badge"/g)||[]).length,1);
 assert.ok(!html.includes('AggregateRating'));
 assert.ok(!html.includes('href="tel:'));
 assert.ok(html.includes('<form id="lead-form" method="dialog"'));
 const schema=JSON.parse(html.match(/<script type="application\/ld\+json">(.*?)<\/script>/s)[1]);
 const lists=schema['@graph'].filter(x=>x['@type']==='ItemList');
 assert.deepEqual(lists.map(x=>x.numberOfItems),[164,11]);
-const enabled=process.env.SITE_INDEXABLE==='true';
+const enabled=process.env.SITE_INDEXABLE!=='false';
 assert.equal(html.includes('content="index, follow, max-image-preview:large"'),enabled);
 if(enabled){const sitemap=await readFile('dist/sitemap.xml','utf8');assert.ok(sitemap.includes('/ratings/dizayn-interera/moskva/'));assert.ok(!sitemap.includes('/privacy/'));}
 else {let exists=true;try{await access('dist/sitemap.xml');}catch{exists=false;}assert.equal(exists,false);}
-console.log(`PASS: 175 scores/ranks, source anchors, 3 promo cards, H1, schema, non-clickable phones, preview form, ${enabled?'production':'preview'} indexing. HTML gzip: ${gzipSync(html).length} bytes.`);
+console.log(`PASS: 175 scores/ranks, source anchors, 1 promo card, H1, schema, non-clickable phones, preview form, ${enabled?'production':'preview'} indexing. HTML gzip: ${gzipSync(html).length} bytes.`);
 const updates=JSON.parse(await readFile('src/data/editorial-updates.json','utf8'));
 const edited=research.studios.map(s=>({...s,...updates[s.studio_id]}));
 for(const s of edited)s.score=s.criteria.reduce((sum,n,i)=>sum+n*research.weights[i],0);
@@ -35,6 +35,9 @@ assert.ok(html.includes('ТОП-175 лучших'));assert.ok(!html.includes('0<
 assert.ok(!html.includes('id="pagination"'));assert.ok(html.includes('id="load-more"'));
 const portfolios=JSON.parse(await readFile('src/data/promo-portfolios.json','utf8'));
 assert.equal(portfolios.length,3);
-for(const p of portfolios){assert.equal(p.works.length,5);const company=await readFile(`dist/companies/${p.slug}/index.html`,'utf8');assert.ok(company.includes('noindex, follow'));for(const w of p.works){await access('public'+w.image);assert.ok(company.includes(w.title));}}
-assert.equal((html.match(/class="portfolio-card-link"/g)||[]).length,3);
-console.log('PASS: sequential 1–175 numbering, draft Alina position 2 / 90 points, three portfolio pages, 15 assets, progressive-list markup.');
+for(const p of portfolios.filter(p=>p.id==='MSK006')){assert.equal(p.works.length,5);const company=await readFile(`dist/companies/${p.slug}/index.html`,'utf8');assert.ok(company.includes(enabled?'index, follow, max-image-preview:large':'noindex, follow'));for(const w of p.works){await access('public'+w.image);assert.ok(company.includes(w.title));}}
+assert.equal((html.match(/class="portfolio-card-link"/g)||[]).length,1);
+console.log('PASS: sequential 1–175 numbering, draft Alina position 2 / 90 points, one active portfolio page, 5 assets, progressive-list markup.');
+
+for(const path of ['index.html','ratings/dizayn-interera/moskva/index.html','companies/alina-salomatina/index.html','privacy/index.html']){const page=await readFile('dist/'+path,'utf8');assert.equal((page.match(/ym\(113588974,'init'/g)||[]).length,1);assert.ok(page.includes('https://mc.yandex.ru/watch/113588974'));}
+console.log('PASS: Metrika counter present once on all four pages.');
