@@ -1,6 +1,6 @@
 ---
 const {city='Москва'}=Astro.props;
-const endpoint=import.meta.env.PUBLIC_LEADS_ENDPOINT||'';
+const endpoint=import.meta.env.PUBLIC_LEADS_ENDPOINT||'https://functions.yandexcloud.net/d4eop20jdj5s36ef87ad';
 ---
 <dialog id="lead-dialog" class="lead-dialog ym-disable-keys" aria-labelledby="lead-title">
  <button class="dialog-close" data-close aria-label="Закрыть форму">×</button><span class="micro accent" id="lead-kicker">ВАШ ПРОЕКТ НАЧИНАЕТСЯ ЗДЕСЬ</span><h2 id="lead-title">Расскажите о вашем доме</h2><p id="lead-recipient" class="r-note"></p>
