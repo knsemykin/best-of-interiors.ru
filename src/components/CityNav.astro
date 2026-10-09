@@ -1,0 +1,5 @@
+---
+import {designCities} from '../data/directory';
+const {current}=Astro.props;
+---
+<nav class="city-nav wrap" aria-label="Выбор города"><a href="/ratings/dizayn-interera/">Все города ↗</a>{designCities.map(c=><a href={c.url} aria-current={current===c.slug?'page':undefined}>{c.region}</a>)}</nav>
