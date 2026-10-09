@@ -1,0 +1,139 @@
+[
+  {
+    "id": "MSK006",
+    "slug": "alina-salomatina",
+    "name": "Alina Salomatina",
+    "highlight": "5,0 на Яндекс Картах",
+    "highlightNote": "43 оценки · проверено 09.10.2026",
+    "works": [
+      {
+        "title": "ЖК Ты и Я",
+        "source": "https://salomatina.design/portfolio/ty-i-ya/",
+        "remote": "https://salomatina.design/images/hero-ty-i-ya.webp",
+        "image": "/images/portfolio/alina-salomatina-1.webp",
+        "kind": "Материал из портфолио студии"
+      },
+      {
+        "title": "КП Цветочный",
+        "source": "https://salomatina.design/portfolio/tsvetochny/",
+        "remote": "https://salomatina.design/images/hero-tsvetochny.webp",
+        "image": "/images/portfolio/alina-salomatina-2.webp",
+        "kind": "Материал из портфолио студии"
+      },
+      {
+        "title": "ЖК Прайм Парк",
+        "source": "https://salomatina.design/portfolio/prime-park/",
+        "remote": "https://salomatina.design/images/hero-prime-park.webp",
+        "image": "/images/portfolio/alina-salomatina-3.webp",
+        "kind": "Материал из портфолио студии"
+      },
+      {
+        "title": "Barnhouse",
+        "source": "https://salomatina.design/portfolio/barnhouse/",
+        "remote": "https://salomatina.design/images/hero-barnhouse.webp",
+        "image": "/images/portfolio/alina-salomatina-4.webp",
+        "kind": "Материал из портфолио студии"
+      },
+      {
+        "title": "ЖК Остров",
+        "source": "https://salomatina.design/portfolio/ostrov/",
+        "remote": "https://salomatina.design/images/hero-ostrov.webp",
+        "image": "/images/portfolio/alina-salomatina-5.webp",
+        "kind": "Материал из портфолио студии"
+      }
+    ]
+  },
+  {
+    "id": "MSK005",
+    "slug": "hot-walls",
+    "name": "Hot Walls",
+    "highlight": "От идеи до пространства",
+    "highlightNote": "Интерьеры и архитектура · с 2013 года",
+    "works": [
+      {
+        "title": "Greens (Гринс)",
+        "subtitle": "2026 Dubai, 130 m²",
+        "source": "https://hot-walls.ru/interiors/greens",
+        "remote": "https://static.tildacdn.com/stor6631-3538-4234-a334-323439386433/179d613695ca9f4ff128c042d3589186.webp",
+        "image": "/images/portfolio/hot-walls-1.webp",
+        "kind": "Материал из портфолио студии"
+      },
+      {
+        "title": "Садовые кварталы 127",
+        "subtitle": "2025 Москва, 127 m²",
+        "source": "https://hot-walls.ru/interiors/sadovyye-kvartaly-127",
+        "remote": "https://static.tildacdn.com/stor3537-3862-4330-b938-626535303539/fd376b4edc0c7bc5f20ab072417e3e8f.jpg",
+        "image": "/images/portfolio/hot-walls-2.webp",
+        "kind": "Материал из портфолио студии"
+      },
+      {
+        "title": "Пентхаус — Кирпичи",
+        "subtitle": "2026 Москва, 140 m²",
+        "source": "https://hot-walls.ru/interiors/penthouse-140",
+        "remote": "https://static.tildacdn.com/stor3030-6562-4261-b864-373963343437/c8fff02963db8ed82a0fb690297faf59.jpg",
+        "image": "/images/portfolio/hot-walls-3.webp",
+        "kind": "Материал из портфолио студии"
+      },
+      {
+        "title": "Дом в Репино",
+        "subtitle": "2025 Санкт-Петербург, 1200 m²",
+        "source": "https://hot-walls.ru/interiors/repino",
+        "remote": "https://static.tildacdn.com/stor3864-3065-4137-b938-663764613766/fde74c9176f15480c459200432255b8b.webp",
+        "image": "/images/portfolio/hot-walls-4.webp",
+        "kind": "Материал из портфолио студии"
+      },
+      {
+        "title": "Воронцово",
+        "subtitle": "2026 Москва, 200 m²",
+        "source": "https://hot-walls.ru/interiors/voroncovo-200",
+        "remote": "https://static.tildacdn.com/stor3233-3633-4265-a632-393166633362/2f26f0b331cd315834468004808d4dfb.jpg",
+        "image": "/images/portfolio/hot-walls-5.webp",
+        "kind": "Материал из портфолио студии"
+      }
+    ]
+  },
+  {
+    "id": "MSK001",
+    "slug": "vproekte",
+    "name": "VPROEKTE",
+    "highlight": "Три авторских направления",
+    "highlightNote": "Nature · Accent · VIP",
+    "works": [
+      {
+        "source": "https://vproekte.com/portfolio/dvuhetazhnyj-penthaus/",
+        "remote": "https://vproekte.com/wp-content/uploads/2026/03/m.lrkt_v1_12-1024x576.webp",
+        "title": "Пентхаус в цао",
+        "image": "/images/portfolio/vproekte-1.webp",
+        "kind": "Материал из портфолио студии"
+      },
+      {
+        "source": "https://vproekte.com/portfolio/dom-v-zhukovke-614-m2/",
+        "remote": "https://vproekte.com/wp-content/uploads/2026/04/hllrkt_f_16-1024x576.webp",
+        "title": "Интерьер дома в жуковке",
+        "image": "/images/portfolio/vproekte-2.webp",
+        "kind": "Материал из портфолио студии"
+      },
+      {
+        "source": "https://vproekte.com/portfolio/dom-v-arhangelskom/",
+        "remote": "https://vproekte.com/wp-content/uploads/2026/04/10000_post-scaled-1024x512.webp",
+        "title": "Дом в архангельском",
+        "image": "/images/portfolio/vproekte-3.webp",
+        "kind": "Материал из портфолио студии"
+      },
+      {
+        "source": "https://vproekte.com/portfolio/kottedzh-v-lajkovo/",
+        "remote": "https://vproekte.com/wp-content/uploads/2023/10/lajkovo-szhatoe.webp",
+        "title": "Дом в кп лайково",
+        "image": "/images/portfolio/vproekte-4.webp",
+        "kind": "Материал из портфолио студии"
+      },
+      {
+        "source": "https://vproekte.com/portfolio/kvartira-v-tolyatti/",
+        "remote": "https://vproekte.com/wp-content/uploads/2026/04/nt.245_lrkt_f_20-scaled-1024x576.webp",
+        "title": "Квартира в тольятти",
+        "image": "/images/portfolio/vproekte-5.webp",
+        "kind": "Материал из портфолио студии"
+      }
+    ]
+  }
+]

@@ -28,3 +28,9 @@ Built-in Imagegen, new generation. Original: `assets/source/moscow-living-origin
 Prompt: Premium editorial interior concept, wide 1536x1024. Dramatic apartment living room, walnut wall panels, ivory sculptural sofa, shiny burgundy coffee table, brushed steel lamp, pale blue daylight through glazing. Architectural magazine framing, warm avant-garde interior, photorealistic CGI and cinematic material texture. No recognizable city buildings, text, logo, people or watermark. An invented concept, not any company's portfolio project.
 
 Both outputs visually inspected. All promo imagery is labelled AI concept, not company work. Existing Imagegen hero and kitchen illustrations reused for the other two placements.
+
+## Promo rosette — 2026-10-09
+Built-in Imagegen. `assets/source/promo-rosette.png` → `public/images/promo-rosette.webp` (transparent 320px).
+Prompt: One isolated 3D editorial icon, a sculptural eight-point chrome asterisk/folded rosette with luminous periwinkle glass center and burgundy reflections. Strong clean silhouette, premium collectible object, front three-quarter perspective, transparent background, no text, logo, checkmark or institutional certification. Decorative attention icon beside factual company highlights.
+
+The same object appears with different rotations in the three promo blocks. It is decorative, not a verification seal. Portfolio photographs/visualizations are now real materials from studio websites, recorded in promo-portfolios.json.

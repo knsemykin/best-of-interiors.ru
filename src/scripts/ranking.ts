@@ -1,3 +1,4 @@
+import './gallery';
 const $ = <T extends HTMLElement = HTMLElement>(selector:string)=>document.querySelector<T>(selector)!;
 const cards=[...document.querySelectorAll<HTMLElement>('[data-studio]')];
 const list=$('#studio-list');
@@ -7,8 +8,7 @@ const budget=$<HTMLSelectElement>('#budget');
 const office=$<HTMLSelectElement>('#office');
 const sort=$<HTMLSelectElement>('#sort');
 const filterForm=$<HTMLFormElement>('#filters');
-let page=1, showAll=false, matches:HTMLElement[]=[];
-const pageSize=12;
+let visibleLimit=50, matches:HTMLElement[]=[];
 const normalize=(v:string)=>v.toLocaleLowerCase('ru').replace(/ё/g,'е').replace(/[^\p{L}\p{N}]+/gu,' ').trim();
 function applyFilters(scroll=false){
  const terms=normalize(search.value).split(' ').filter(Boolean);
@@ -22,32 +22,26 @@ function applyFilters(scroll=false){
   return ['supervision','procurement','renovation'].every(key=>!$<HTMLInputElement>('#'+key).checked||d[key]==='true');
  });
  matches.sort((a,b)=>sort.value==='name'?(a.dataset.name||'').localeCompare(b.dataset.name||'','ru'):sort.value==='price'?(Number(a.dataset.price)||Infinity)-(Number(b.dataset.price)||Infinity)||(a.dataset.name||'').localeCompare(b.dataset.name||'','ru'):Number(b.dataset.score)-Number(a.dataset.score)||(a.dataset.name||'').localeCompare(b.dataset.name||'','ru'));
- const pages=Math.max(1,Math.ceil(matches.length/pageSize));page=Math.min(Math.max(1,page),pages);
  cards.forEach(card=>card.hidden=true);
- const visible=showAll?matches:matches.slice((page-1)*pageSize,page*pageSize);
+ const visible=matches.slice(0,visibleLimit);
  visible.forEach(card=>{list.append(card);card.hidden=false;});
  $('#result-count').textContent=`Найдено: ${matches.length} из ${cards.length}`;
  $('#empty-state').hidden=!!matches.length;
- $('#pagination').hidden=showAll||matches.length<=pageSize;
- $('#page-status').textContent=`${page} / ${pages}`;
- $<HTMLButtonElement>('#page-prev').disabled=page===1;
- $<HTMLButtonElement>('#page-next').disabled=page===pages;
- $('#show-all').hidden=matches.length<=pageSize;
- $('#show-all').textContent=showAll?'Разбить результаты на страницы':'Показать все результаты на одной странице';
+ $('#page-status').textContent=`Показано ${visible.length} из ${matches.length}`;
+ $('#load-more').hidden=visible.length>=matches.length;
+ $('#load-more').textContent=`Показать ещё ${Math.min(10,matches.length-visible.length)} студий ↓`;
  if(scroll)$('#rating').scrollIntoView({block:'start',behavior:'instant'});
 }
 filterForm.addEventListener('submit',e=>e.preventDefault());
-filterForm.addEventListener('input',()=>{page=1;applyFilters();});
-filterForm.addEventListener('reset',()=>{setTimeout(()=>{page=1;showAll=false;sort.value='score';applyFilters();},0);});
-sort.addEventListener('change',()=>{page=1;applyFilters();});
+filterForm.addEventListener('input',()=>{visibleLimit=50;applyFilters();});
+filterForm.addEventListener('reset',()=>{setTimeout(()=>{visibleLimit=50;sort.value='score';applyFilters();},0);});
+sort.addEventListener('change',()=>{visibleLimit=50;applyFilters();});
 $('#empty-reset').addEventListener('click',()=>filterForm.reset());
-$('#page-next').addEventListener('click',()=>{page++;applyFilters(true);});
-$('#page-prev').addEventListener('click',()=>{page--;applyFilters(true);});
-$('#show-all').addEventListener('click',()=>{showAll=!showAll;page=1;applyFilters(true);});
+$('#load-more').addEventListener('click',()=>{const firstNew=matches[visibleLimit];visibleLimit+=10;applyFilters();if(firstNew){firstNew.tabIndex=-1;firstNew.focus({preventScroll:true});firstNew.scrollIntoView({block:'start',behavior:'instant'});}});
 function revealHash(){
  const id=decodeURIComponent(location.hash.slice(1));const card=cards.find(c=>c.id===id);if(!card)return;
  filterForm.reset();
- setTimeout(()=>{search.value='';segment.value=card.dataset.segment!;budget.value='all';office.value='all';sort.value='score';page=1;showAll=false;applyFilters();page=Math.floor(matches.indexOf(card)/pageSize)+1;applyFilters();requestAnimationFrame(()=>card.scrollIntoView({block:'start',behavior:'instant'}));},1);
+ setTimeout(()=>{search.value='';segment.value=card.dataset.segment!;budget.value='all';office.value='all';sort.value='score';visibleLimit=50;applyFilters();visibleLimit=Math.max(50,Math.ceil((matches.indexOf(card)+1)/10)*10);applyFilters();requestAnimationFrame(()=>card.scrollIntoView({block:'start',behavior:'instant'}));},1);
 }
 applyFilters();revealHash();window.addEventListener('hashchange',revealHash);
 
@@ -57,7 +51,7 @@ const compare=$<HTMLDialogElement>('#compare-dialog');
 function refreshSelection(){
  document.querySelectorAll<HTMLButtonElement>('[data-save]').forEach(button=>{const saved=selected.has(button.dataset.save!);button.setAttribute('aria-pressed',String(saved));button.textContent=saved?'✓':'＋';button.setAttribute('aria-label',`${saved?'Убрать':'Добавить'} ${cards.find(c=>c.id===button.dataset.save)?.dataset.name} ${saved?'из сравнения':'в сравнение'}`);});
  $('#saved-count').textContent=String(selected.size);$('#compare-open').hidden=selected.size===0;
- $('#sticky-title').textContent=selected.size?`В сравнении: ${selected.size} из 4`:'Один бриф. Больше ясности.';
+ $('#sticky-title').textContent=selected.size?`В сравнении: ${selected.size} из 4`:'Один бриф — много предложений.';
  $('#sticky-brief').hidden=false;
 }
 document.querySelectorAll<HTMLButtonElement>('[data-save]').forEach(button=>button.addEventListener('click',()=>{
