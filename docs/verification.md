@@ -15,3 +15,9 @@
 GitHub: https://github.com/knsemykin/best-of-interiors.ru
 Timeweb project: https://timeweb.cloud/my/projects/3017763
 App Platform: тариф согласован пользователем. Приложение 267437 создано в проекте 3017763. Сборка 97f448b успешна, статус «В сети». Node.js 24, npm run build, /dist. Технический адрес https://knsemykin-best-of-interiors-ru-2cea.twc1.net — на момент проверки DNS возвращает NXDOMAIN, поэтому внешняя HTTP-проверка не завершена. Основной домен best-of-interiors.ru не подключён. Изменения после 97f448b затрагивают только документацию и .gitignore.
+
+## Dark visual revision
+- Graphite background, blue accents, burgundy surfaces, larger text throughout.
+- Body text 18px, introductory copy 22px desktop / 20px mobile.
+- Generated abstract background, CSS transform animation, reveal motion, reduced-motion support and pause button.
+- Checked desktop and 390px mobile: no horizontal overflow; pause control sets animation-play-state to paused; browser console has no errors.
