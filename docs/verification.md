@@ -21,3 +21,13 @@ App Platform: тариф согласован пользователем. При
 - Body text 18px, introductory copy 22px desktop / 20px mobile.
 - Generated abstract background, CSS transform animation, reveal motion, reduced-motion support and pause button.
 - Checked desktop and 390px mobile: no horizontal overflow; pause control sets animation-play-state to paused; browser console has no errors.
+
+## Moscow ranking — 2026-10-09
+- `npm run build` and `npm run check:ranking` pass in preview and `SITE_INDEXABLE=true` modes; final local build restored to preview.
+- All 175 imported scores and competition ranks recomputed; two segments 164/11; excluded 80 candidates not published.
+- Static HTML: one H1, unique IDs, valid internal hash targets, three PROMO cards, schema list counts, dimensioned images, no AggregateRating, no clickable contact blocks.
+- HTML ~1.66 MB uncompressed, ~84 KB gzip. Ranking client JS ~10 KB. Main 1800w WebP ~72 KB. Actual host compression still requires production verification.
+- In-app browser: name search, price <=3000 (5 results), commercial segment (11 results), empty state/reset, pagination, deep link to Hot Walls (page 12/14), two-studio comparison, personal form and all three quiz steps.
+- Unchecked consent prevents completion; completed preview explicitly reports no delivery; closing clears form fields.
+- Desktop and mobile 390px inspected. Fixed grid min-width causing horizontal overflow. Contacts details open correctly and stay within width. Viewport restored after check.
+- No Lighthouse/field-CWV or ranking-position claims. No real data sent, no new paid services enabled.

@@ -1,1 +1,19 @@
-{"name":"best-of-interiors","private":true,"version":"0.1.0","type":"module","scripts":{"dev":"astro dev --host 0.0.0.0","build":"astro build","preview":"astro preview --host 0.0.0.0"},"dependencies":{"@fontsource-variable/manrope":"^5.2.8","astro":"7.3.8"},"devDependencies":{"sharp":"^0.35.5"}}
+{
+  "name": "best-of-interiors",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev --host 0.0.0.0",
+    "build": "astro build && node scripts/write-search-files.mjs",
+    "preview": "astro preview --host 0.0.0.0",
+    "check:ranking": "node scripts/check-ranking.mjs"
+  },
+  "dependencies": {
+    "@fontsource-variable/manrope": "^5.2.8",
+    "astro": "7.3.8"
+  },
+  "devDependencies": {
+    "sharp": "^0.35.5"
+  }
+}

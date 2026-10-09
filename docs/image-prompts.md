@@ -18,3 +18,13 @@ Use case: stylized-concept. Asset: abstract atmospheric background for a sophist
 Original: assets/source/atmosphere-original.png.
 Responsive files: public/images/atmosphere-{640,1200,1800}.webp.
 Animation is implemented in CSS (slow translation/scaling), with a visible pause button and prefers-reduced-motion support. The generated asset itself is a static image.
+
+## Moscow portal — 2026-10-09
+Built-in Imagegen, new generation. Original: `assets/source/moscow-portal-original.png`; responsive WebP: `public/images/moscow-portal-{640,1200,1800}.webp`.
+Prompt: Premium architectural abstract hero artwork for a Russian interior design studio directory. Wide 1536x1024. Sculptural folded brushed chrome ribbon forms an open doorway on near-black graphite background with soft burgundy and periwinkle gradients. Strong elegant geometry, velvety grain, realistic metallic reflections, cinematic shadows. Negative space left; sculpture right and a small burgundy sphere. Restrained experimental luxury, no text, logos or watermark. Slow motion supplied in CSS.
+
+## Moscow living concept — 2026-10-09
+Built-in Imagegen, new generation. Original: `assets/source/moscow-living-original.png`; WebP: `public/images/moscow-living-{640,1200}.webp`.
+Prompt: Premium editorial interior concept, wide 1536x1024. Dramatic apartment living room, walnut wall panels, ivory sculptural sofa, shiny burgundy coffee table, brushed steel lamp, pale blue daylight through glazing. Architectural magazine framing, warm avant-garde interior, photorealistic CGI and cinematic material texture. No recognizable city buildings, text, logo, people or watermark. An invented concept, not any company's portfolio project.
+
+Both outputs visually inspected. All promo imagery is labelled AI concept, not company work. Existing Imagegen hero and kitchen illustrations reused for the other two placements.
