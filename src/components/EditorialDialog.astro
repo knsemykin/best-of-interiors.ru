@@ -1,7 +1,7 @@
 <dialog id="editorial-dialog" class="editorial-dialog ym-disable-keys" aria-labelledby="editorial-title">
  <button type="button" class="editorial-close" aria-label="Закрыть обращение">×</button>
  <span class="editorial-kicker">НА СВЯЗИ С РЕДАКЦИЕЙ</span><h2 id="editorial-title">Исправить информацию</h2>
- <p id="editorial-context"></p><p>Обращение придёт редакции Best of Interiors. Мы проверим сведения и свяжемся с вами. Изменения не публикуются автоматически.</p>
+ <p id="editorial-context"></p><p id="editorial-explanation">Обращение придёт редакции Best of Interiors. Мы проверим сведения и свяжемся с вами. Изменения не публикуются автоматически.</p>
  <form id="editorial-form">
   <input type="hidden" name="kind"/><input type="hidden" name="studio"/>
   <label>Название компании<input name="company" required maxlength="150" autocomplete="organization"/></label>
@@ -28,6 +28,8 @@ document.querySelectorAll<HTMLButtonElement>('[data-correction],[data-cooperatio
  dialog.querySelector('#editorial-title')!.textContent=correction?'Исправить информацию':'Обсудить сотрудничество';
  dialog.querySelector('#editorial-context')!.textContent=correction?`Карточка: ${button.dataset.company}`:'Расскажите о компании и интересующем формате размещения.';
  dialog.querySelector('#editorial-message-label')!.textContent=correction?'Что нужно исправить?':'Какое сотрудничество вас интересует?';
+ dialog.querySelector('#editorial-explanation')!.textContent=correction?'Мы проверим сведения и свяжемся с вами. Изменения не публикуются автоматически.':'Редакция ответит по вашим контактам, уточнит свободные позиции и подготовит условия договора.';
+ if(!correction&&button.dataset.plan)field('comment').value=button.dataset.plan;
  dialog.querySelector('#editorial-error')!.textContent='';dialog.showModal();
 }));
 dialog.querySelector('.editorial-close')!.addEventListener('click',()=>{if(!sending)dialog.close();});dialog.addEventListener('cancel',e=>{if(sending)e.preventDefault();});

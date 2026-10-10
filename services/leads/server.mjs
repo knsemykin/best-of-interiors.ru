@@ -14,7 +14,7 @@ export function validate(input){
  d.kind=d.kind||'lead';if(!['lead','correction','cooperation'].includes(d.kind))throw Error('Неверный тип обращения.');
  if(d.kind==='lead'&&input.transferConsent!==true)throw Error('Необходимо согласие на передачу заявки студиям.');
  if(input.consent!==true)throw Error('Необходимо согласие на обработку данных.');
- if(!(targets.has(d.page)||(d.kind==='cooperation'&&d.page==='/'))||!/^[0-9a-f-]{36}$/i.test(d.requestId))throw Error('Обновите страницу и повторите отправку.');
+ if(!(targets.has(d.page)||(d.kind==='cooperation'&&['/','/partners/'].includes(d.page)))||!/^[0-9a-f-]{36}$/i.test(d.requestId))throw Error('Обновите страницу и повторите отправку.');
  const city=d.page.includes('voronezh')?'voronezh':'moskva';d.city=city;
  const studioList=catalog[city];
  if(d.studio!=='brief'&&!studioList[d.studio])throw Error('Студия не найдена в этом рейтинге.');
