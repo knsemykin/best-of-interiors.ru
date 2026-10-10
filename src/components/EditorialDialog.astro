@@ -1,0 +1,38 @@
+<dialog id="editorial-dialog" class="editorial-dialog ym-disable-keys" aria-labelledby="editorial-title">
+ <button type="button" class="editorial-close" aria-label="Закрыть обращение">×</button>
+ <span class="editorial-kicker">НА СВЯЗИ С РЕДАКЦИЕЙ</span><h2 id="editorial-title">Исправить информацию</h2>
+ <p id="editorial-context"></p><p>Обращение придёт редакции Best of Interiors. Мы проверим сведения и свяжемся с вами. Изменения не публикуются автоматически.</p>
+ <form id="editorial-form">
+  <input type="hidden" name="kind"/><input type="hidden" name="studio"/>
+  <label>Название компании<input name="company" required maxlength="150" autocomplete="organization"/></label>
+  <div class="editorial-grid"><label>Ваше имя<input name="name" required minlength="2" maxlength="80" autocomplete="name"/></label><label>Ваша роль в компании<input name="role" required maxlength="100" placeholder="Например, руководитель"/></label></div>
+  <div class="editorial-grid"><label>Электронная почта<input name="email" type="email" required maxlength="180" autocomplete="email"/></label><label>Телефон<input name="phone" type="tel" required maxlength="25" autocomplete="tel" placeholder="+7 999 123-45-67"/></label></div>
+  <label><span id="editorial-message-label">Что нужно исправить?</span><textarea name="comment" required minlength="20" maxlength="5000" rows="5" placeholder="Укажите текущие сведения и правильный вариант"></textarea></label>
+  <label>Ссылки на сайт и подтверждающие материалы<textarea name="sources" maxlength="2000" rows="2" placeholder="Сайт, портфолио, страницы с актуальными ценами"/></label>
+  <div class="editorial-honey" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"/></div>
+  <label class="editorial-consent"><input name="consent" type="checkbox" required/><span>Даю <a href="/privacy/#editorial-consent" target="_blank" rel="noopener">согласие на обработку обращения</a> и ознакомлен с политикой конфиденциальности.</span></label>
+  <p id="editorial-error" role="alert"></p><button class="editorial-submit" type="submit">Отправить редакции ↗</button>
+ </form><div id="editorial-result" hidden tabindex="-1"><h3>Обращение отправлено</h3><p>Спасибо! Редакция рассмотрит ваше сообщение и ответит по указанным контактам.</p><p id="editorial-reference"></p></div>
+</dialog>
+<style>
+.editorial-dialog{width:min(740px,calc(100% - 24px));max-height:90dvh;overflow:auto;margin:auto;padding:clamp(24px,4vw,48px);border:1px solid #455169;border-radius:24px;background:#141b27;color:#f2f3f7;font-family:inherit}.editorial-dialog::backdrop{background:#050810cc;backdrop-filter:blur(7px)}.editorial-close{position:absolute;right:18px;top:12px;background:none;border:0;color:inherit;font-size:32px;cursor:pointer}.editorial-kicker{font-size:12px;letter-spacing:.13em;color:#aec4ff}.editorial-dialog h2{font-size:clamp(28px,4vw,42px);line-height:1.15;letter-spacing:-1px;margin:20px 0}.editorial-dialog p{font-size:16px;line-height:1.6;color:#c2cadb;margin:12px 0}.editorial-dialog label{display:grid;gap:8px;font-size:16px;margin:16px 0}.editorial-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.editorial-dialog input,.editorial-dialog textarea{width:100%;box-sizing:border-box;background:#0d131e;border:1px solid #46516a;border-radius:10px;padding:12px;color:white;font:inherit}.editorial-dialog textarea{resize:vertical}.editorial-dialog .editorial-consent{display:flex;gap:12px;align-items:flex-start;font-size:14px;line-height:1.6}.editorial-consent input{width:20px;height:20px;flex:0 0 20px}.editorial-dialog a{color:#aec4ff;text-decoration:underline}.editorial-submit{padding:16px 24px;border:0;border-radius:40px;background:#a6bfff;color:#111827;font:inherit;cursor:pointer}.editorial-submit:disabled{opacity:.6}.editorial-honey{position:absolute;left:-10000px}.editorial-dialog #editorial-error{color:#ffb4b4}@media(max-width:550px){.editorial-grid{grid-template-columns:1fr;gap:0}}
+</style>
+<script>
+const dialog=document.querySelector<HTMLDialogElement>('#editorial-dialog')!;
+const form=dialog.querySelector<HTMLFormElement>('form')!;
+const field=(name:string)=>form.elements.namedItem(name) as HTMLInputElement;
+let requestId=crypto.randomUUID(),sending=false;
+document.querySelectorAll<HTMLButtonElement>('[data-correction],[data-cooperation]').forEach(button=>button.addEventListener('click',()=>{
+ if(sending)return;form.reset();requestId=crypto.randomUUID();form.hidden=false;dialog.querySelector<HTMLElement>('#editorial-result')!.hidden=true;
+ const correction=button.hasAttribute('data-correction');field('kind').value=correction?'correction':'cooperation';field('studio').value=button.dataset.correction||'brief';field('company').value=button.dataset.company||'';
+ dialog.querySelector('#editorial-title')!.textContent=correction?'Исправить информацию':'Обсудить сотрудничество';
+ dialog.querySelector('#editorial-context')!.textContent=correction?`Карточка: ${button.dataset.company}`:'Расскажите о компании и интересующем формате размещения.';
+ dialog.querySelector('#editorial-message-label')!.textContent=correction?'Что нужно исправить?':'Какое сотрудничество вас интересует?';
+ dialog.querySelector('#editorial-error')!.textContent='';dialog.showModal();
+}));
+dialog.querySelector('.editorial-close')!.addEventListener('click',()=>{if(!sending)dialog.close();});dialog.addEventListener('cancel',e=>{if(sending)e.preventDefault();});
+form.addEventListener('submit',async e=>{e.preventDefault();if(sending||!form.reportValidity())return;const error=dialog.querySelector('#editorial-error')!;error.textContent='';const data=Object.fromEntries(new FormData(form));const button=form.querySelector<HTMLButtonElement>('[type=submit]')!;sending=true;button.disabled=true;button.textContent='Отправляем…';
+ try{const response=await fetch('https://functions.yandexcloud.net/d4eop20jdj5s36ef87ad',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...data,consent:data.consent==='on',requestId,page:location.pathname}),signal:AbortSignal.timeout(30000)});const result=await response.json();if(!response.ok||!result.ok)throw Error(result.error||'Не удалось отправить. Попробуйте позже.');form.hidden=true;const panel=dialog.querySelector<HTMLElement>('#editorial-result')!;panel.hidden=false;panel.focus();dialog.querySelector('#editorial-reference')!.textContent=`Номер обращения: ${result.id.slice(0,8)}`;
+ }catch(e){error.textContent=e instanceof Error&&e.name!=='TimeoutError'?e.message:'Не удалось получить подтверждение. Попробуйте позже.';}finally{sending=false;button.disabled=false;button.textContent='Отправить редакции ↗';}
+});
+</script>
