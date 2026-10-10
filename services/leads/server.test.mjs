@@ -44,14 +44,14 @@ test('editorial requests require representative details but not lead transfer co
 });
 test('new catalogs accept their own companies and reject cross-segment recipients',async()=>{
  const catalog=(await import('./studios.json',{with:{type:'json'}})).default;
- for(const [key,path] of [['yekaterinburg','/ratings/dizayn-interera/yekaterinburg/'],['sankt-peterburg','/ratings/dizayn-interera/sankt-peterburg/'],...['chastnye-doma','development','gorodskaya-sreda'].map(s=>['architecture-'+s,'/ratings/arhitekturnye-byuro/moskva/'+s+'/'])]){
+ for(const [key,path] of [['kazan','/ratings/dizayn-interera/kazan/'],['yekaterinburg','/ratings/dizayn-interera/yekaterinburg/'],['sankt-peterburg','/ratings/dizayn-interera/sankt-peterburg/'],...['chastnye-doma','development','gorodskaya-sreda'].map(s=>['architecture-'+s,'/ratings/arhitekturnye-byuro/moskva/'+s+'/'])]){
  const id=Object.keys(catalog[key])[0];const d=validate({...sample(),studio:id,page:path});assert.equal(d.studioName,catalog[key][id]);assert.throws(()=>validate({...sample(),studio:'VRN004',page:path}));
  assert.equal(validate({...sample(),studio:'brief',page:path,area:'100',location:'Тестовый город',brief:'Тестовый подробный проект для проверки',audience:'selected',priceSegment:'any',selected:[id]}).selectedNames[0],catalog[key][id]);
  }
 });
 
 test('Salomatina promo is a valid recipient outside the organic city ranking',()=>{
- for(const city of ['yekaterinburg','sankt-peterburg']){
+ for(const city of ['kazan','yekaterinburg','sankt-peterburg']){
  const d=validate({...sample(),page:'/ratings/dizayn-interera/'+city+'/'});assert.equal(d.studioName,'Alina Salomatina Interiors');
  }
 });
