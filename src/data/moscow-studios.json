@@ -486,7 +486,7 @@
     },
     {
       "studio_id": "MSK006",
-      "name": "Alina Salomatina",
+      "name": "Alina Salomatina Interiors",
       "entity_type": "Частный дизайнер / авторская команда",
       "segment": "Жилые интерьеры",
       "region_model": "Москва/МО: офис заявлен",
@@ -11318,9 +11318,9 @@
     },
     {
       "studio_id": "MSK006",
-      "studio": "Alina Salomatina",
+      "studio": "Alina Salomatina Interiors",
       "field": "name",
-      "value": "Alina Salomatina",
+      "value": "Alina Salomatina Interiors",
       "source_url": "https://salomatina.design",
       "source_type": "official_page",
       "checked_at": "2026-10-09",
@@ -11328,7 +11328,7 @@
     },
     {
       "studio_id": "MSK006",
-      "studio": "Alina Salomatina",
+      "studio": "Alina Salomatina Interiors",
       "field": "website",
       "value": "https://salomatina.design",
       "source_url": "https://salomatina.design",
@@ -11338,7 +11338,7 @@
     },
     {
       "studio_id": "MSK006",
-      "studio": "Alina Salomatina",
+      "studio": "Alina Salomatina Interiors",
       "field": "region_model",
       "value": "Москва/МО: офис заявлен",
       "source_url": "https://salomatina.design/kontakty",
@@ -11348,7 +11348,7 @@
     },
     {
       "studio_id": "MSK006",
-      "studio": "Alina Salomatina",
+      "studio": "Alina Salomatina Interiors",
       "field": "office_address",
       "value": "Москва, Нижняя Сыромятническая, 10, ARTPLAY",
       "source_url": "https://salomatina.design/kontakty",
@@ -11358,7 +11358,7 @@
     },
     {
       "studio_id": "MSK006",
-      "studio": "Alina Salomatina",
+      "studio": "Alina Salomatina Interiors",
       "field": "author_supervision",
       "value": "Заявлено",
       "source_url": "https://salomatina.design/ceny",
@@ -11368,7 +11368,7 @@
     },
     {
       "studio_id": "MSK006",
-      "studio": "Alina Salomatina",
+      "studio": "Alina Salomatina Interiors",
       "field": "procurement",
       "value": "Заявлено",
       "source_url": "https://salomatina.design/ceny",
@@ -11378,7 +11378,7 @@
     },
     {
       "studio_id": "MSK006",
-      "studio": "Alina Salomatina",
+      "studio": "Alina Salomatina Interiors",
       "field": "renovation_service",
       "value": "Заявлено",
       "source_url": "https://salomatina.design/ceny",
@@ -11388,7 +11388,7 @@
     },
     {
       "studio_id": "MSK006",
-      "studio": "Alina Salomatina",
+      "studio": "Alina Salomatina Interiors",
       "field": "working_drawings",
       "value": "Заявлено",
       "source_url": "https://salomatina.design/ceny",
@@ -11398,7 +11398,7 @@
     },
     {
       "studio_id": "MSK006",
-      "studio": "Alina Salomatina",
+      "studio": "Alina Salomatina Interiors",
       "field": "procurement_orders",
       "value": "Закупки / заказы заявлены",
       "source_url": "https://salomatina.design/ceny",
@@ -11408,7 +11408,7 @@
     },
     {
       "studio_id": "MSK006",
-      "studio": "Alina Salomatina",
+      "studio": "Alina Salomatina Interiors",
       "field": "services",
       "value": "3D / визуализация",
       "source_url": "https://salomatina.design/ceny",
@@ -11418,7 +11418,7 @@
     },
     {
       "studio_id": "MSK006",
-      "studio": "Alina Salomatina",
+      "studio": "Alina Salomatina Interiors",
       "field": "services",
       "value": "Декорирование",
       "source_url": "https://salomatina.design/ceny",
@@ -11428,7 +11428,7 @@
     },
     {
       "studio_id": "MSK006",
-      "studio": "Alina Salomatina",
+      "studio": "Alina Salomatina Interiors",
       "field": "services",
       "value": "Инженерные разделы",
       "source_url": "https://salomatina.design/spb",
@@ -11438,7 +11438,7 @@
     },
     {
       "studio_id": "MSK006",
-      "studio": "Alina Salomatina",
+      "studio": "Alina Salomatina Interiors",
       "field": "phone",
       "value": "+79032603465; +79202275273",
       "source_url": "https://salomatina.design/kontakty",
@@ -11448,7 +11448,7 @@
     },
     {
       "studio_id": "MSK006",
-      "studio": "Alina Salomatina",
+      "studio": "Alina Salomatina Interiors",
       "field": "youtube",
       "value": "https://www.youtube.com/@AlinaSalomatina",
       "source_url": "https://salomatina.design/video",
@@ -11458,7 +11458,7 @@
     },
     {
       "studio_id": "MSK006",
-      "studio": "Alina Salomatina",
+      "studio": "Alina Salomatina Interiors",
       "field": "styles_mentioned",
       "value": "Современный",
       "source_url": "https://salomatina.design",
@@ -11468,7 +11468,7 @@
     },
     {
       "studio_id": "MSK006",
-      "studio": "Alina Salomatina",
+      "studio": "Alina Salomatina Interiors",
       "field": "styles_mentioned",
       "value": "Неоклассика",
       "source_url": "https://salomatina.design/portfolio/tsvetochny/",
@@ -11478,7 +11478,7 @@
     },
     {
       "studio_id": "MSK006",
-      "studio": "Alina Salomatina",
+      "studio": "Alina Salomatina Interiors",
       "field": "residential_complexes",
       "value": "Ты и Я",
       "source_url": "https://salomatina.design/portfolio/ty-i-ya/",
@@ -11488,7 +11488,7 @@
     },
     {
       "studio_id": "MSK006",
-      "studio": "Alina Salomatina",
+      "studio": "Alina Salomatina Interiors",
       "field": "residential_complexes",
       "value": "Прайм Парк",
       "source_url": "https://salomatina.design/portfolio/tsvetochny/",
@@ -11498,7 +11498,7 @@
     },
     {
       "studio_id": "MSK006",
-      "studio": "Alina Salomatina",
+      "studio": "Alina Salomatina Interiors",
       "field": "residential_complexes",
       "value": "West Garden",
       "source_url": "https://salomatina.design",
@@ -11508,7 +11508,7 @@
     },
     {
       "studio_id": "MSK006",
-      "studio": "Alina Salomatina",
+      "studio": "Alina Salomatina Interiors",
       "field": "design_rub_m2_from",
       "value": 3900,
       "source_url": "https://salomatina.design/ceny",
@@ -11518,7 +11518,7 @@
     },
     {
       "studio_id": "MSK006",
-      "studio": "Alina Salomatina",
+      "studio": "Alina Salomatina Interiors",
       "field": "portfolio_evidence",
       "value": "Реализованные работы заявлены / обозначены на сайте",
       "source_url": "https://salomatina.design/portfolio/tsvetochny/",
@@ -37752,7 +37752,7 @@
     },
     {
       "studio_id": "MSK006",
-      "studio": "Alina Salomatina",
+      "studio": "Alina Salomatina Interiors",
       "residential_complex": "Ты и Я",
       "work_type": "Интерьер / дизайн-проект; статус реализации отдельно не установлен",
       "source_url": "https://salomatina.design/portfolio/ty-i-ya/",
@@ -37761,7 +37761,7 @@
     },
     {
       "studio_id": "MSK006",
-      "studio": "Alina Salomatina",
+      "studio": "Alina Salomatina Interiors",
       "residential_complex": "Прайм Парк",
       "work_type": "Интерьер / дизайн-проект; статус реализации отдельно не установлен",
       "source_url": "https://salomatina.design/portfolio/prime-park/",
@@ -37770,7 +37770,7 @@
     },
     {
       "studio_id": "MSK006",
-      "studio": "Alina Salomatina",
+      "studio": "Alina Salomatina Interiors",
       "residential_complex": "West Garden",
       "work_type": "Интерьер / дизайн-проект; статус реализации отдельно не установлен",
       "source_url": "https://salomatina.design/portfolio/west-garden/",
@@ -39572,7 +39572,7 @@
     },
     {
       "studio_id": "MSK006",
-      "studio": "Alina Salomatina",
+      "studio": "Alina Salomatina Interiors",
       "context": "Alina Salomatina Interiors / Стоимость дизайн-проекта",
       "published_price": "Начните с бесплатной консультации. Индивидуальный проект — 3 900–5 900 ₽/м², эксклюзивный — 6 900–8 500 ₽/м². Сравните состав и рассчитайте предварительный бюджет.",
       "source_url": "https://salomatina.design/ceny",
@@ -39581,7 +39581,7 @@
     },
     {
       "studio_id": "MSK006",
-      "studio": "Alina Salomatina",
+      "studio": "Alina Salomatina Interiors",
       "context": "Индивидуальный проект / Цельный интерьер в почерке студии. Всё необходимое для реализации в одном проекте.",
       "published_price": "3 900–5 900 ₽/м²",
       "source_url": "https://salomatina.design/ceny",
@@ -39590,7 +39590,7 @@
     },
     {
       "studio_id": "MSK006",
-      "studio": "Alina Salomatina",
+      "studio": "Alina Salomatina Interiors",
       "context": "роект / Интерьер с нуля под вас: сложная стилистика, редкие материалы и предметы, созданные специально для проекта.",
       "published_price": "6 900–8 500 ₽/м²",
       "source_url": "https://salomatina.design/ceny",
@@ -39599,7 +39599,7 @@
     },
     {
       "studio_id": "MSK006",
-      "studio": "Alina Salomatina",
+      "studio": "Alina Salomatina Interiors",
       "context": "м² / От 20 до 500 м². Для другого метража обсудим расчёт лично.",
       "published_price": "Тип объекта Квартира Загородный дом Коммерческое помещение Формат работы Индивидуальный проект 3 900 ₽–5 900 ₽ / м² Эксклюзивный проект 6 900 ₽–8 500 ₽ / м²",
       "source_url": "https://salomatina.design/ceny",
@@ -39608,7 +39608,7 @@
     },
     {
       "studio_id": "MSK006",
-      "studio": "Alina Salomatina",
+      "studio": "Alina Salomatina Interiors",
       "context": "рческое помещение Формат работы Индивидуальный проект 3 900 ₽–5 900 ₽ / м² Эксклюзивный проект 6 900 ₽–8 500 ₽ / м²",
       "published_price": "Предварительная стоимость проекта 312 000 ₽ — 472 000 ₽",
       "source_url": "https://salomatina.design/ceny",
@@ -39617,7 +39617,7 @@
     },
     {
       "studio_id": "MSK006",
-      "studio": "Alina Salomatina",
+      "studio": "Alina Salomatina Interiors",
       "context": "Если хотите поручить студии ремонт и комплектацию. / Авторский надзор ↗︎",
       "published_price": "Со своей бригадой. От 55 000 ₽; в эксклюзивном проекте — 2 месяца включены.",
       "source_url": "https://salomatina.design/ceny",
@@ -39626,7 +39626,7 @@
     },
     {
       "studio_id": "MSK006",
-      "studio": "Alina Salomatina",
+      "studio": "Alina Salomatina Interiors",
       "context": "овый интерьер — с вашим решением. Подключим дизайнера к работе вашей бригады и поможем вовремя заметить отклонения.",
       "published_price": "От 55 000 ₽ состав и период согласуем по объекту",
       "source_url": "https://salomatina.design/avtorskiy-nadzor",
@@ -39635,7 +39635,7 @@
     },
     {
       "studio_id": "MSK006",
-      "studio": "Alina Salomatina",
+      "studio": "Alina Salomatina Interiors",
       "context": "Стоимость авторского надзора / Авторский надзор",
       "published_price": "от 55 000 ₽",
       "source_url": "https://salomatina.design/avtorskiy-nadzor",
@@ -39644,7 +39644,7 @@
     },
     {
       "studio_id": "MSK006",
-      "studio": "Alina Salomatina",
+      "studio": "Alina Salomatina Interiors",
       "context": "Ориентир по открытым предложениям / На рынке встречается оплата около 10% от закупок",
       "published_price": "Например, при бюджете 3 млн ₽ такая модель даёт 300 тыс. ₽ за услугу. Это пример других студий, а не тариф Alina Salomatina Interiors и не статистическая средняя по всему рынку. Со",
       "source_url": "https://salomatina.design/komplektaciya-interiera",
@@ -39653,7 +39653,7 @@
     },
     {
       "studio_id": "MSK006",
-      "studio": "Alina Salomatina",
+      "studio": "Alina Salomatina Interiors",
       "context": "мплектации включены / В стоимость эксклюзивного дизайн-проекта. Период, состав и продление закрепляются в договоре.",
       "published_price": "Для сравнения: модель 10 % на рынке 300 000 ₽",
       "source_url": "https://salomatina.design/komplektaciya-interiera",
@@ -39662,7 +39662,7 @@
     },
     {
       "studio_id": "MSK006",
-      "studio": "Alina Salomatina",
+      "studio": "Alina Salomatina Interiors",
       "context": "Пушкинская, 1 офис в Воронеже / 2 формата глубины проектирования",
       "published_price": "От 3 900 ₽/м² стоимость дизайн-проекта",
       "source_url": "https://salomatina.design/voronezh",
@@ -39671,7 +39671,7 @@
     },
     {
       "studio_id": "MSK006",
-      "studio": "Alina Salomatina",
+      "studio": "Alina Salomatina Interiors",
       "context": "м² / От 20 до 500 м². Для другого метража обсудим расчёт лично.",
       "published_price": "Тип объекта Квартира Загородный дом Бизнес Формат работы Индивидуальный проект 3 900 ₽–5 900 ₽ / м² Эксклюзивный проект 6 900 ₽–8 500 ₽ / м²",
       "source_url": "https://salomatina.design/voronezh",
@@ -39680,7 +39680,7 @@
     },
     {
       "studio_id": "MSK006",
-      "studio": "Alina Salomatina",
+      "studio": "Alina Salomatina Interiors",
       "context": "ериода, состав участия и условия дальнейшего сопровождения определяем в договоре. / Сколько стоит первая встреча? +",
       "published_price": "Первое знакомство с задачей бесплатно. Подробная консультация с повесткой и письменным резюме — отдельная услуга, онлайн от 5 000 ₽.",
       "source_url": "https://salomatina.design/voronezh",
@@ -39689,7 +39689,7 @@
     },
     {
       "studio_id": "MSK006",
-      "studio": "Alina Salomatina",
+      "studio": "Alina Salomatina Interiors",
       "context": "",
       "published_price": "Дизайн интерьера в Санкт-Петербурге — проект квартиры и дома от 3 900 ₽/м² | Alina Salomatina Interiors",
       "source_url": "https://salomatina.design/spb",
