@@ -9,6 +9,7 @@ assert.equal(new Set(ids).size,10);assert.equal((h.match(/class="promo-badge"/g)
 assert.deepEqual([...h.matchAll(/class="rank-number"[^>]*>(\d+)</g)].map(m=>+m[1]),Array.from({length:10},(_,i)=>i+1));
 const catalog=JSON.parse(await readFile('services/leads/studios.json','utf8'));
 assert.deepEqual(ids.toSorted(),Object.keys(catalog.russia).toSorted());
-for(const city of ['moskva','voronezh','sankt-peterburg','yekaterinburg','kazan','nizhny-novgorod','chelyabinsk','rostov-na-donu','krasnodar'])assert.ok(h.includes(`/ratings/dizayn-interera/${city}/#`));
+assert.deepEqual(ids,['MSK005','MSK001','MSK004','MSK006','MSK057','MSK039','MSK199','MSK127','RUS001','MSK129']);
+assert.ok(h.includes('data-directory="editorial"'));
 assert.ok(h.includes('ТОП-10 лучших'));assert.ok(h.includes('content="index, follow'));assert.ok(h.includes('href="https://best-of-interiors.ru/ratings/dizayn-interera/"'));
-console.log('PASS Russia: ten unique studios, nine cities, ordinal/schema/catalog parity, promo, indexability.');
+console.log('PASS Russia: ten unique studios, editorial order, ordinal/schema/catalog parity, promo, indexability.');

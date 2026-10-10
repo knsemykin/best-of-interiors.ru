@@ -1,4 +1,5 @@
 import './gallery';
+const editorial=document.body.dataset.directory==='editorial';
 const architecture=document.body.dataset.directory==='architecture';
 const $ = <T extends HTMLElement = HTMLElement>(selector:string)=>document.querySelector<T>(selector)!;
 const cards=[...document.querySelectorAll<HTMLElement>('[data-studio]')];
@@ -26,7 +27,7 @@ function applyFilters(scroll=false){
   if(Array.from(document.querySelectorAll<HTMLInputElement>('[data-competency]:checked')).some(input=>d[input.dataset.competency!]!=='true'))return false;
   return ['supervision','procurement','renovation'].every(key=>!$<HTMLInputElement>('#'+key).checked||d[key]==='true');
  });
- matches.sort((a,b)=>sort.value==='name'?(a.dataset.name||'').localeCompare(b.dataset.name||'','ru'):sort.value==='price'?(Number(a.dataset.price)||Infinity)-(Number(b.dataset.price)||Infinity)||(a.dataset.name||'').localeCompare(b.dataset.name||'','ru'):Number(b.dataset.score)-Number(a.dataset.score)||(a.dataset.name||'').localeCompare(b.dataset.name||'','ru'));
+ matches.sort((a,b)=>sort.value==='name'?(a.dataset.name||'').localeCompare(b.dataset.name||'','ru'):sort.value==='price'?(Number(a.dataset.price)||Infinity)-(Number(b.dataset.price)||Infinity)||(a.dataset.name||'').localeCompare(b.dataset.name||'','ru'):editorial?Number(a.dataset.position)-Number(b.dataset.position):Number(b.dataset.score)-Number(a.dataset.score)||(a.dataset.name||'').localeCompare(b.dataset.name||'','ru'));
  cards.forEach(card=>card.hidden=true);
  const visible=matches.slice(0,visibleLimit);
  visible.forEach(card=>{list.append(card);card.hidden=false;});
@@ -73,7 +74,7 @@ function renderComparison(){
  const chosen=cards.filter(c=>selected.has(c.id));
  chosen.forEach(card=>{const th=cell('th',card.dataset.name!);const remove=document.createElement('button');remove.textContent='Убрать из сравнения';remove.dataset.remove=card.id;remove.addEventListener('click',()=>{selected.delete(card.id);refreshSelection();renderComparison();});th.append(remove);row.append(th);});head.append(row);table.append(head);
  const body=document.createElement('tbody');
- const rows:[string,(c:HTMLElement)=>string][]=[['Направление',c=>c.dataset.kind?({studio:'Студия / бюро',author:'Авторская команда',renovation:'Ремонт и дизайн',bureau:'Архитектурное бюро'}[c.dataset.kind]||'Студия'):c.dataset.segment==='home'?'Жилые интерьеры':'Бизнес / архитектура'],['Индекс сведений',c=>`${Number(c.dataset.score).toLocaleString('ru-RU')} / 100`],[architecture?'Архитектурный тариф':'Дизайн-проект',c=>architecture?(c.dataset.price?`от ${Number(c.dataset.price).toLocaleString('ru-RU')} ₽/м² · ${document.querySelector<HTMLSelectElement>('#price-product')?.selectedOptions[0]?.text}`:'По запросу по выбранному продукту'):c.querySelector('.studio-facts dd')?.textContent||'Уточнить'],['Офис',c=>c.querySelector('.studio-location')?.textContent||'Уточнить'],['Сопровождение',c=>c.dataset.supervision==='true'?'Заявлено':'Уточните у студии'],['Комплектация',c=>c.dataset.procurement==='true'?'Заявлено':'Уточните у студии'],['Реализация',c=>c.dataset.renovation==='true'?'Заявлено':'Уточните у студии']];
+ const rows:[string,(c:HTMLElement)=>string][]=[['Направление',c=>c.dataset.kind?({studio:'Студия / бюро',author:'Авторская команда',renovation:'Ремонт и дизайн',bureau:'Архитектурное бюро'}[c.dataset.kind]||'Студия'):c.dataset.segment==='home'?'Жилые интерьеры':'Бизнес / архитектура'],[editorial?'Место в подборке':'Индекс сведений',c=>editorial?c.dataset.position||'':`${Number(c.dataset.score).toLocaleString('ru-RU')} / 100`],[architecture?'Архитектурный тариф':'Дизайн-проект',c=>architecture?(c.dataset.price?`от ${Number(c.dataset.price).toLocaleString('ru-RU')} ₽/м² · ${document.querySelector<HTMLSelectElement>('#price-product')?.selectedOptions[0]?.text}`:'По запросу по выбранному продукту'):c.querySelector('.studio-facts dd')?.textContent||'Уточнить'],['Офис',c=>c.querySelector('.studio-location')?.textContent||'Уточнить'],['Сопровождение',c=>c.dataset.supervision==='true'?'Заявлено':'Уточните у студии'],['Комплектация',c=>c.dataset.procurement==='true'?'Заявлено':'Уточните у студии'],['Реализация',c=>c.dataset.renovation==='true'?'Заявлено':'Уточните у студии']];
  rows.forEach(([name,value])=>{const tr=document.createElement('tr');const th=cell('th',name);th.setAttribute('scope','row');tr.append(th);chosen.forEach(c=>tr.append(cell('td',value(c))));body.append(tr);});table.append(body);const wrapper=document.createElement('div');wrapper.className='compare-table-wrap';wrapper.append(table);container.append(wrapper);
 }
 $('#compare-open').addEventListener('click',()=>{renderComparison();compare.showModal();});

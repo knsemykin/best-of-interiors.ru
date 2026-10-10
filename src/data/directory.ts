@@ -7,6 +7,7 @@ import nn from './nizhny-novgorod-studios.json';
 import chelyabinsk from './chelyabinsk-studios.json';
 import rostov from './rostov-na-donu-studios.json';
 import krasnodar from './krasnodar-studios.json';
+import samara from './samara-studios.json';
 // Add published city ratings here; navigation and the city directory use this registry.
 export const designCities = [
  {slug:'moskva',name:'Москва',region:'Москва и Московская область',count:moscow.studios.length,description:'Студии, авторские команды и архитектурные бюро Москвы и области.'},
@@ -18,4 +19,5 @@ export const designCities = [
  {slug:'chelyabinsk',name:'Челябинск',region:'Челябинск',count:chelyabinsk.studios.length,description:'Челябинские команды для квартир и домов: проектирование, комплектация, надзор и реализация.'},
  {slug:'rostov-na-donu',name:'Ростов-на-Дону',region:'Ростов-на-Дону',count:rostov.studios.length,description:'Ростовские студии и авторские команды: проекты квартир и домов, цены, комплектация и реализация.'},
  {slug:'krasnodar',name:'Краснодар',region:'Краснодар',count:krasnodar.studios.length,description:'Краснодарские студии для квартир и домов: проекты, цены, комплектация и сопровождение.'},
+ {slug:'samara',name:'Самара',region:'Самара',count:samara.studios.length,description:'Самарские студии и авторские команды: проекты квартир и домов, цены и сопровождение ремонта.'},
 ].map(city=>({...city,url:`/ratings/dizayn-interera/${city.slug}/`}));
