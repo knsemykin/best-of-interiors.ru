@@ -1,0 +1,7 @@
+---
+import ArchitectureRating from '../../../../components/ArchitectureRating.astro';
+import {architectureSections} from '../../../../data/architecture';
+export function getStaticPaths(){return architectureSections.map(section=>({params:{segment:section.slug},props:{section}}));}
+const {section}=Astro.props;
+---
+<ArchitectureRating section={section}/>

@@ -1,0 +1,8 @@
+---
+import EditorialDialog from './EditorialDialog.astro';
+import LeadDialog from './LeadDialog.astro';
+const {city='Москва',architecture=false}=Astro.props;
+---
+<div class="sticky-brief" id="sticky-brief"><div><strong id="sticky-title">Один бриф — много предложений.</strong><span id="sticky-copy">Около 3 минут · бесплатно</span></div><button id="compare-open" class="r-secondary" hidden>Сравнить <span id="saved-count">0</span></button><button class="r-button" data-quiz>Получить предложения бесплатно ↗</button><button id="sticky-dismiss" aria-label="Скрыть панель">×</button></div>
+<dialog id="compare-dialog" class="compare-dialog" aria-labelledby="compare-title"><button class="dialog-close" data-close aria-label="Закрыть сравнение">×</button><span class="micro accent">ВАШ КОРОТКИЙ СПИСОК</span><h2 id="compare-title">Сравните по важному.</h2><div id="compare-content"></div><button class="r-button" id="compare-brief">Один бриф выбранным компаниям ↗</button><p class="r-note">Список сравнения сохраняется только до перезагрузки страницы.</p></dialog><EditorialDialog/><LeadDialog city={city} architecture={architecture}/>
+<script>import '../scripts/ranking';</script>

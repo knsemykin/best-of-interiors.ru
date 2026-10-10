@@ -5,7 +5,7 @@ import {randomUUID} from 'node:crypto';
 import {validate,letter,createHandler} from './server.mjs';
 const sample=()=>({requestId:randomUUID(),name:'Тест сайта',phone:'+70000000000',email:'test@example.com',studio:'MSK006',page:'/ratings/dizayn-interera/moskva/',consent:true,transferConsent:true,comment:'Тестовая заявка'});
 test('validates consent, city and fields; preserves complete brief',()=>{
- assert.equal(validate(sample()).studioName,'Alina Salomatina');
+ assert.equal(validate(sample()).studioName,'Alina Salomatina Interiors');
  for(const change of [{transferConsent:false},{consent:false},{phone:'abc'},{email:'bad\r\nBcc: a@b.ru'},{studio:'VRN004'},{page:'https://evil.test'},{comment:'x'.repeat(5001)}])assert.throws(()=>validate({...sample(),...change}));
  const d=validate({...sample(),studio:'brief',area:'85',location:'Москва',brief:'Подробное описание задачи для проверки отправки',audience:'selected',priceSegment:'any',selected:['MSK006'],property:'Квартира',budget:'3–7 млн ₽'});
  assert.match(letter(d,'test'),/85/);assert.match(letter(d,'test'),/Подробное описание/);assert.match(letter(d,'test'),/Alina Salomatina/);
@@ -41,4 +41,11 @@ test('editorial requests require representative details but not lead transfer co
  for(const kind of ['correction','cooperation']){const input={...sample(),kind,company:'Тестовая студия',role:'Руководитель',comment:'Просим обновить информацию о нашей студии',transferConsent:false};const d=validate(input);assert.match(letter(d,'test'),/Руководитель/);assert.throws(()=>validate({...input,email:''}));assert.throws(()=>validate({...input,consent:false}));}
  assert.throws(()=>validate({...sample(),kind:'unknown'}));
  assert.throws(()=>validate({...sample(),kind:'correction',studio:'brief',company:'Студия',role:'Директор'}));
+});
+test('new catalogs accept their own companies and reject cross-segment recipients',async()=>{
+ const catalog=(await import('./studios.json',{with:{type:'json'}})).default;
+ for(const [key,path] of [['sankt-peterburg','/ratings/dizayn-interera/sankt-peterburg/'],...['chastnye-doma','development','gorodskaya-sreda'].map(s=>['architecture-'+s,'/ratings/arhitekturnye-byuro/moskva/'+s+'/'])]){
+ const id=Object.keys(catalog[key])[0];const d=validate({...sample(),studio:id,page:path});assert.equal(d.studioName,catalog[key][id]);assert.throws(()=>validate({...sample(),page:path}));
+ assert.equal(validate({...sample(),studio:'brief',page:path,area:'100',location:'Тестовый город',brief:'Тестовый подробный проект для проверки',audience:'selected',priceSegment:'any',selected:[id]}).selectedNames[0],catalog[key][id]);
+ }
 });

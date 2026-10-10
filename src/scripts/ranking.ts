@@ -1,4 +1,5 @@
 import './gallery';
+const architecture=document.body.dataset.directory==='architecture';
 const $ = <T extends HTMLElement = HTMLElement>(selector:string)=>document.querySelector<T>(selector)!;
 const cards=[...document.querySelectorAll<HTMLElement>('[data-studio]')];
 const list=$('#studio-list');
@@ -13,13 +14,14 @@ const normalize=(v:string)=>v.toLocaleLowerCase('ru').replace(/ё/g,'е').replac
 function applyFilters(scroll=false){
  const terms=normalize(search.value).split(' ').filter(Boolean);
  matches=cards.filter(card=>{
-  const d=card.dataset, amount=Number(d.price||0);
+  const d=card.dataset;const product=document.querySelector<HTMLSelectElement>('#price-product');if(product)d.price=card.getAttribute('data-price-'+product.value)||'';const amount=Number(d.price||0);
   if(segment.value!=='all' && segment.value!==d.segment)return false;
   const kind=document.querySelector<HTMLSelectElement>('#team-type');if(kind&&kind.value!=='all'&&kind.value!==d.kind)return false;
   if(office.value!=='all'&&office.value!==d.office)return false;
   if(terms.some(term=>!normalize(d.search||'').includes(term)))return false;
   if(budget.value==='known'&&!amount || budget.value==='unknown'&&amount)return false;
   if(!['all','known','unknown'].includes(budget.value)&&(!amount||amount>Number(budget.value)))return false;
+  if(Array.from(document.querySelectorAll<HTMLInputElement>('[data-competency]:checked')).some(input=>d[input.dataset.competency!]!=='true'))return false;
   return ['supervision','procurement','renovation'].every(key=>!$<HTMLInputElement>('#'+key).checked||d[key]==='true');
  });
  matches.sort((a,b)=>sort.value==='name'?(a.dataset.name||'').localeCompare(b.dataset.name||'','ru'):sort.value==='price'?(Number(a.dataset.price)||Infinity)-(Number(b.dataset.price)||Infinity)||(a.dataset.name||'').localeCompare(b.dataset.name||'','ru'):Number(b.dataset.score)-Number(a.dataset.score)||(a.dataset.name||'').localeCompare(b.dataset.name||'','ru'));
@@ -30,7 +32,7 @@ function applyFilters(scroll=false){
  $('#empty-state').hidden=!!matches.length;
  $('#page-status').textContent=`Показано ${visible.length} из ${matches.length}`;
  $('#load-more').hidden=visible.length>=matches.length;
- $('#load-more').textContent=`Показать ещё ${Math.min(10,matches.length-visible.length)} студий ↓`;
+ $('#load-more').textContent=`Показать ещё · ${Math.min(10,matches.length-visible.length)} ↓`;
  if(scroll)$('#rating').scrollIntoView({block:'start',behavior:'instant'});
 }
 filterForm.addEventListener('submit',e=>e.preventDefault());
@@ -57,19 +59,19 @@ function refreshSelection(){
 }
 document.querySelectorAll<HTMLButtonElement>('[data-save]').forEach(button=>button.addEventListener('click',()=>{
  const id=button.dataset.save!;
- if(selected.has(id))selected.delete(id);else if(selected.size<4)selected.add(id);else{$('#result-count').textContent='В сравнении уже 4 студии. Уберите одну, чтобы добавить другую.';return;}refreshSelection();
+ if(selected.has(id))selected.delete(id);else if(selected.size<4)selected.add(id);else{$('#result-count').textContent='В сравнении уже 4 компании. Уберите одну, чтобы добавить другую.';return;}refreshSelection();
 }));
 function cell(tag:string,text:string){const el=document.createElement(tag);el.textContent=text;return el;}
 function renderComparison(){
  const container=$('#compare-content');container.replaceChildren();
- if(!selected.size){container.append(cell('p','Список пока пуст. Добавьте студии кнопкой «+» в карточках.'));$('#compare-brief').hidden=true;return;}
+ if(!selected.size){container.append(cell('p','Список пока пуст. Добавьте компании кнопкой «+» в карточках.'));$('#compare-brief').hidden=true;return;}
  $('#compare-brief').hidden=false;
  const table=document.createElement('table');const caption=document.createElement('caption');caption.textContent='Сведения из карточек. Услуги заявлены компаниями.';table.append(caption);
  const head=document.createElement('thead'),row=document.createElement('tr');row.append(cell('th','Что сравниваем'));
  const chosen=cards.filter(c=>selected.has(c.id));
  chosen.forEach(card=>{const th=cell('th',card.dataset.name!);const remove=document.createElement('button');remove.textContent='Убрать из сравнения';remove.dataset.remove=card.id;remove.addEventListener('click',()=>{selected.delete(card.id);refreshSelection();renderComparison();});th.append(remove);row.append(th);});head.append(row);table.append(head);
  const body=document.createElement('tbody');
- const rows:[string,(c:HTMLElement)=>string][]=[['Направление',c=>c.dataset.kind?({studio:'Студия / бюро',author:'Авторская команда',renovation:'Ремонт и дизайн'}[c.dataset.kind]||'Студия'):c.dataset.segment==='home'?'Жилые интерьеры':'Бизнес / архитектура'],['Индекс сведений',c=>`${Number(c.dataset.score).toLocaleString('ru-RU')} / 100`],['Дизайн-проект',c=>c.querySelector('.studio-facts dd')?.textContent||'Уточнить'],['Офис',c=>c.querySelector('.studio-location')?.textContent||'Уточнить'],['Сопровождение',c=>c.dataset.supervision==='true'?'Заявлено':'Уточните у студии'],['Комплектация',c=>c.dataset.procurement==='true'?'Заявлено':'Уточните у студии'],['Реализация',c=>c.dataset.renovation==='true'?'Заявлено':'Уточните у студии']];
+ const rows:[string,(c:HTMLElement)=>string][]=[['Направление',c=>c.dataset.kind?({studio:'Студия / бюро',author:'Авторская команда',renovation:'Ремонт и дизайн',bureau:'Архитектурное бюро'}[c.dataset.kind]||'Студия'):c.dataset.segment==='home'?'Жилые интерьеры':'Бизнес / архитектура'],['Индекс сведений',c=>`${Number(c.dataset.score).toLocaleString('ru-RU')} / 100`],[architecture?'Архитектурный тариф':'Дизайн-проект',c=>architecture?(c.dataset.price?`от ${Number(c.dataset.price).toLocaleString('ru-RU')} ₽/м² · ${document.querySelector<HTMLSelectElement>('#price-product')?.selectedOptions[0]?.text}`:'По запросу по выбранному продукту'):c.querySelector('.studio-facts dd')?.textContent||'Уточнить'],['Офис',c=>c.querySelector('.studio-location')?.textContent||'Уточнить'],['Сопровождение',c=>c.dataset.supervision==='true'?'Заявлено':'Уточните у студии'],['Комплектация',c=>c.dataset.procurement==='true'?'Заявлено':'Уточните у студии'],['Реализация',c=>c.dataset.renovation==='true'?'Заявлено':'Уточните у студии']];
  rows.forEach(([name,value])=>{const tr=document.createElement('tr');const th=cell('th',name);th.setAttribute('scope','row');tr.append(th);chosen.forEach(c=>tr.append(cell('td',value(c))));body.append(tr);});table.append(body);const wrapper=document.createElement('div');wrapper.className='compare-table-wrap';wrapper.append(table);container.append(wrapper);
 }
 $('#compare-open').addEventListener('click',()=>{renderComparison();compare.showModal();});
@@ -102,16 +104,16 @@ function updateAudience(){
  const custom=$<HTMLSelectElement>('#brief-audience').value==='selected';
  $('#studio-picker').hidden=!custom;
  const names=cards.filter(c=>requestStudios.has(c.id)).map(c=>c.dataset.name).join(', ');
- const message=custom?(names?`Получатели после обработки редакцией: ${names}.`:'Выберите студии ниже.'):'Редакция подберёт студии под вашу задачу и бюджет и передаст им заявку для подготовки КП.';
+ const message=custom?(names?`Получатели после обработки редакцией: ${names}.`:'Выберите компании ниже.'):'Редакция подберёт компании под вашу задачу и бюджет и передаст им заявку для подготовки КП.';
  $('#audience-note').textContent=message;
- $('#recipient-summary').textContent=quiz?message:`После обработки редакцией заявка будет передана ${cards.find(c=>c.id===$<HTMLInputElement>('#lead-studio').value)?.dataset.name||'выбранной студии'}.`;
+ $('#recipient-summary').textContent=quiz?message:`После обработки редакцией заявка будет передана ${cards.find(c=>c.id===$<HTMLInputElement>('#lead-studio').value)?.dataset.name||'выбранной компании'}.`;
 }
 function renderStudioPicker(){
  const list=$('#studio-picker-list');list.replaceChildren();
  const query=$<HTMLInputElement>('#studio-picker-search').value.trim().toLocaleLowerCase();
  cards.filter(c=>c.dataset.name!.toLocaleLowerCase().includes(query)).forEach(card=>{
   const label=document.createElement('label'),input=document.createElement('input');input.type='checkbox';input.checked=requestStudios.has(card.id);
-  input.addEventListener('change',()=>{if(input.checked&&requestStudios.size>=4){input.checked=false;$('#form-error').textContent='Можно выбрать до 4 студий.';return;}input.checked?requestStudios.add(card.id):requestStudios.delete(card.id);$('#form-error').textContent='';updateAudience();});
+  input.addEventListener('change',()=>{if(input.checked&&requestStudios.size>=4){input.checked=false;$('#form-error').textContent='Можно выбрать до 4 компаний.';return;}input.checked?requestStudios.add(card.id):requestStudios.delete(card.id);$('#form-error').textContent='';updateAudience();});
   label.append(input,document.createTextNode(card.dataset.name!));list.append(label);
  });
 }
@@ -121,7 +123,7 @@ $('#compare-brief').addEventListener('click',()=>{compare.close();openLead(undef
 function validStep(){
  const fields=[...form.querySelectorAll<HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement>(`[data-step="${step}"] input,[data-step="${step}"] select,[data-step="${step}"] textarea`)];
  const invalid=fields.find(field=>!field.disabled&&!field.checkValidity());if(invalid){invalid.reportValidity();return false;}
- if(quiz&&step===1&&$<HTMLSelectElement>('#brief-audience').value==='selected'&&!requestStudios.size){$('#form-error').textContent='Выберите хотя бы одну студию или доверьте подбор редакции.';return false;}
+ if(quiz&&step===1&&$<HTMLSelectElement>('#brief-audience').value==='selected'&&!requestStudios.size){$('#form-error').textContent='Выберите хотя бы одну компанию или доверьте подбор редакции.';return false;}
  if(step===2){const phone=$<HTMLInputElement>('[name=phone]');if(phone.value.replace(/\D/g,'').length<7||!/^[-+0-9()\s]+$/.test(phone.value)){$('#form-error').textContent='Укажите телефон: не менее 7 цифр.';phone.focus();return false;}}
  return true;
 }
@@ -132,7 +134,7 @@ form.addEventListener('submit',event=>{event.preventDefault();if(quiz&&step<2){i
 lead.addEventListener('close',()=>form.reset());
 
 function calculate(){const area=$<HTMLInputElement>('#calc-area'),rate=$<HTMLInputElement>('#calc-rate');$('#calc-result').textContent=area.value&&rate.value&&area.checkValidity()&&rate.checkValidity()?`${(Number(area.value)*Number(rate.value)).toLocaleString('ru-RU')} ₽`:'Уточните значения';}
-$('#calc-area').addEventListener('input',calculate);$('#calc-rate').addEventListener('input',calculate);
+$('#calc-area')?.addEventListener('input',calculate);$('#calc-rate')?.addEventListener('input',calculate);
 const preference=matchMedia('(prefers-reduced-motion: reduce)');let paused=preference.matches;
 const motion=$<HTMLButtonElement>('.rank-motion');
 function updateMotion(){document.documentElement.dataset.rankingMotion=paused?'paused':'running';motion.setAttribute('aria-pressed',String(paused));motion.setAttribute('aria-label',paused?'Включить анимацию':'Приостановить анимацию');motion.textContent=paused?'▷':'Ⅱ';}
