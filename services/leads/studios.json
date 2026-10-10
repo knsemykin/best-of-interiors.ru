@@ -264,7 +264,8 @@
     "SPB006": "Art Spice",
     "SPB032": "OLO HOME",
     "SPB025": "Манифест.Дизайн",
-    "SPB041": "STUDIO 5214"
+    "SPB041": "STUDIO 5214",
+    "MSK006": "Alina Salomatina Interiors"
   },
   "architecture-chastnye-doma": {
     "ARC035": "Московский архитектор",
@@ -386,5 +387,28 @@
     "ARC121": "ПИ АРЕНА",
     "ARC080": "FORM",
     "ARC078": "Рождественка"
+  },
+  "yekaterinburg": {
+    "EKB001": "АРТэврика",
+    "EKB002": "Alexander Tischler",
+    "EKB011": "FM Design",
+    "EKB018": "PRADO",
+    "EKB007": "Студия 33",
+    "EKB005": "D&D Design",
+    "EKB003": "Neapol Design",
+    "EKB009": "Про Дизайн",
+    "EKB006": "Goroh Interiors / Горох",
+    "EKB010": "A-STUDIODESIGN",
+    "EKB017": "LYAMINA DESIGN",
+    "EKB012": "MIRONENKO.DESIGN",
+    "EKB004": "Ndesign",
+    "EKB008": "ХОЛСТ",
+    "EKB015": "MOOD",
+    "EKB020": "plus interior",
+    "EKB016": "CHEBANOVA DESIGN",
+    "EKB013": "Мари + Дизайн",
+    "EKB014": "DESHOUSE interiors",
+    "EKB019": "AMIKS GROUP",
+    "MSK006": "Alina Salomatina Interiors"
   }
 }

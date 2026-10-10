@@ -2,6 +2,8 @@ import './gallery';
 const architecture=document.body.dataset.directory==='architecture';
 const $ = <T extends HTMLElement = HTMLElement>(selector:string)=>document.querySelector<T>(selector)!;
 const cards=[...document.querySelectorAll<HTMLElement>('[data-studio]')];
+const recipients=cards.map(c=>({id:c.id,name:c.dataset.name!}));
+document.querySelectorAll<HTMLElement>('[data-promo-recipient]').forEach(el=>{if(!recipients.some(r=>r.id===el.dataset.promoRecipient))recipients.push({id:el.dataset.promoRecipient!,name:el.dataset.name!});});
 const list=$('#studio-list');
 const search=$<HTMLInputElement>('#search');
 const segment=$<HTMLSelectElement>('#segment');
@@ -89,10 +91,10 @@ function showStep(){
 }
 function openLead(id?:string,fromCompare=false){
  quiz=!id;step=quiz?0:2;form.reset();form.hidden=false;$('#lead-result').hidden=true;
- const studio=cards.find(c=>c.id===id);
+ const studio=recipients.find(c=>c.id===id);
  $<HTMLInputElement>('#lead-studio').value=studio?.id||'brief';
  $('#lead-title').textContent=quiz?'Ваш проект. Один бриф.':'Познакомимся поближе?';
- $('#lead-recipient').textContent=studio?`Персональное предложение от ${studio.dataset.name}`:'Опишите задачу, чтобы сравнивать предложения на одинаковых условиях.';
+ $('#lead-recipient').textContent=studio?`Персональное предложение от ${studio.name}`:'Опишите задачу, чтобы сравнивать предложения на одинаковых условиях.';
  $<HTMLSelectElement>('#brief-audience').value=fromCompare?'selected':'editorial';
  requestStudios.clear();if(fromCompare)selected.forEach(id=>requestStudios.add(id));renderStudioPicker();updateAudience();
  showStep();lead.showModal();
@@ -103,18 +105,18 @@ const requestStudios=new Set<string>();
 function updateAudience(){
  const custom=$<HTMLSelectElement>('#brief-audience').value==='selected';
  $('#studio-picker').hidden=!custom;
- const names=cards.filter(c=>requestStudios.has(c.id)).map(c=>c.dataset.name).join(', ');
+ const names=recipients.filter(c=>requestStudios.has(c.id)).map(c=>c.name).join(', ');
  const message=custom?(names?`Получатели после обработки редакцией: ${names}.`:'Выберите компании ниже.'):'Редакция подберёт компании под вашу задачу и бюджет и передаст им заявку для подготовки КП.';
  $('#audience-note').textContent=message;
- $('#recipient-summary').textContent=quiz?message:`После обработки редакцией заявка будет передана ${cards.find(c=>c.id===$<HTMLInputElement>('#lead-studio').value)?.dataset.name||'выбранной компании'}.`;
+ $('#recipient-summary').textContent=quiz?message:`После обработки редакцией заявка будет передана ${recipients.find(c=>c.id===$<HTMLInputElement>('#lead-studio').value)?.name||'выбранной компании'}.`;
 }
 function renderStudioPicker(){
  const list=$('#studio-picker-list');list.replaceChildren();
  const query=$<HTMLInputElement>('#studio-picker-search').value.trim().toLocaleLowerCase();
- cards.filter(c=>c.dataset.name!.toLocaleLowerCase().includes(query)).forEach(card=>{
+ recipients.filter(c=>c.name.toLocaleLowerCase().includes(query)).forEach(card=>{
   const label=document.createElement('label'),input=document.createElement('input');input.type='checkbox';input.checked=requestStudios.has(card.id);
   input.addEventListener('change',()=>{if(input.checked&&requestStudios.size>=4){input.checked=false;$('#form-error').textContent='Можно выбрать до 4 компаний.';return;}input.checked?requestStudios.add(card.id):requestStudios.delete(card.id);$('#form-error').textContent='';updateAudience();});
-  label.append(input,document.createTextNode(card.dataset.name!));list.append(label);
+  label.append(input,document.createTextNode(card.name));list.append(label);
  });
 }
 $('#studio-picker-search').addEventListener('input',renderStudioPicker);
