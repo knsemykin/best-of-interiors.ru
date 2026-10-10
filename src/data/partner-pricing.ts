@@ -11,3 +11,12 @@ export function placementCost(base:number,months:number){
  const monthly=Math.round(base*(100-term.discount)/100);
  return {monthly,total:monthly*months,saving:base*months-monthly*months,discount:term.discount,months};
 }
+export function geographicCost(position:number,includeMoscow:boolean,regionalCities:number,months:number){
+ if(!Number.isInteger(position)||position<0||position>2||!Number.isInteger(regionalCities)||regionalCities<0)throw new Error('Invalid placement');
+ const bonus=includeMoscow&&position===0;
+ const regionalRate=partnerPrices.region[position]*(bonus?.5:1);
+ const base=(includeMoscow?partnerPrices.moscow[position]:0)+regionalCities*regionalRate;
+ const cost=placementCost(base,months);
+ const bonusSaving=regionalCities*(partnerPrices.region[position]-regionalRate)*months;
+ return {...cost,base,bonus,regionalRate,bonusSaving,totalSaving:cost.saving+bonusSaving};
+}
