@@ -18,7 +18,7 @@ exports.handler=async(event)=>{
   if(!process.env.SMTP_USER||!process.env.SMTP_PASSWORD)throw Error('SMTP configuration missing');
   const transport=nodemailer.createTransport({host:'smtp.timeweb.ru',port:465,secure:true,auth:{user:process.env.SMTP_USER,pass:process.env.SMTP_PASSWORD},connectionTimeout:8000,greetingTimeout:8000,socketTimeout:18000,disableFileAccess:true,disableUrlAccess:true});
   return exports.makeAdapter(createHandler(async(d,id)=>{
-   const result=await transport.sendMail({from:{name:'Best of Interiors',address:process.env.SMTP_USER},to:'hello@best-of-interiors.ru',...(d.email?{replyTo:d.email}:{}),subject:`${d.kind==='correction'?'Исправление карточки':d.kind==='cooperation'?'Сотрудничество':'Заявка с сайта'} · ${d.city==='chelyabinsk'?'Челябинск':d.city==='nizhny-novgorod'?'Нижний Новгород':d.city==='kazan'?'Казань':d.city==='yekaterinburg'?'Екатеринбург':d.city==='sankt-peterburg'?'Санкт-Петербург':d.city==='voronezh'?'Воронеж':'Москва'} · ${id.slice(0,8)}`,text:letter(d,id)});
+   const result=await transport.sendMail({from:{name:'Best of Interiors',address:process.env.SMTP_USER},to:'hello@best-of-interiors.ru',...(d.email?{replyTo:d.email}:{}),subject:`${d.kind==='correction'?'Исправление карточки':d.kind==='cooperation'?'Сотрудничество':'Заявка с сайта'} · ${d.city==='rostov-na-donu'?'Ростов-на-Дону':d.city==='chelyabinsk'?'Челябинск':d.city==='nizhny-novgorod'?'Нижний Новгород':d.city==='kazan'?'Казань':d.city==='yekaterinburg'?'Екатеринбург':d.city==='sankt-peterburg'?'Санкт-Петербург':d.city==='voronezh'?'Воронеж':'Москва'} · ${id.slice(0,8)}`,text:letter(d,id)});
    if(!result.accepted?.length)throw Error('SMTP recipient not accepted');
   }));
  })().catch(error=>{handlerPromise=undefined;throw error;});
