@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+const h=await readFile('dist/ratings/dizayn-interera/index.html','utf8');
+const schema=JSON.parse(h.match(/<script type="application\/ld\+json">(.*?)<\/script>/s)[1]);
+const list=schema['@graph'].find(x=>x['@type']==='ItemList');
+assert.equal(list.numberOfItems,10);assert.equal(list.itemListElement.length,10);
+const ids=[...h.matchAll(/id="([A-Z]+\d+)" data-studio/g)].map(m=>m[1]);
+assert.equal(new Set(ids).size,10);assert.equal((h.match(/class="promo-badge"/g)||[]).length,1);
+assert.deepEqual([...h.matchAll(/class="rank-number"[^>]*>(\d+)</g)].map(m=>+m[1]),Array.from({length:10},(_,i)=>i+1));
+const catalog=JSON.parse(await readFile('services/leads/studios.json','utf8'));
+assert.deepEqual(ids.toSorted(),Object.keys(catalog.russia).toSorted());
+for(const city of ['moskva','voronezh','sankt-peterburg','yekaterinburg','kazan','nizhny-novgorod','chelyabinsk','rostov-na-donu','krasnodar'])assert.ok(h.includes(`/ratings/dizayn-interera/${city}/#`));
+assert.ok(h.includes('ТОП-10 лучших'));assert.ok(h.includes('content="index, follow'));assert.ok(h.includes('href="https://best-of-interiors.ru/ratings/dizayn-interera/"'));
+console.log('PASS Russia: ten unique studios, nine cities, ordinal/schema/catalog parity, promo, indexability.');

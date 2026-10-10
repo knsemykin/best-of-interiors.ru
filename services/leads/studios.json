@@ -494,5 +494,39 @@
     "RND017": "A+ Design Studio",
     "RND019": "Chado / Чадо",
     "MSK006": "Alina Salomatina Interiors"
+  },
+  "krasnodar": {
+    "KRD005": "ZERC",
+    "KRD011": "AG Construction",
+    "KRD008": "Авангард",
+    "KRD012": "Ruskin",
+    "KRD004": "Твёрдый Знак",
+    "KRD003": "BonTon",
+    "KRD001": "ПРО Дизайн",
+    "KRD007": "ROOM",
+    "KRD018": "Abramova Studio",
+    "KRD002": "Студия Анастасии Солдатенко",
+    "KRD014": "FARENI",
+    "KRD015": "Студия Надежды Подбельской",
+    "KRD013": "Darling Design",
+    "KRD009": "ONEPLACE BÜRO",
+    "KRD017": "Уютные метры",
+    "KRD019": "KONRADI DESIGN",
+    "KRD010": "Студия Елены Рукиной",
+    "KRD006": "Проект 405",
+    "KRD016": "CV / COSTAVERO",
+    "MSK006": "Alina Salomatina Interiors"
+  },
+  "russia": {
+    "MSK001": "VPROEKTE",
+    "VRN007": "ELDECO",
+    "SPB002": "Artum",
+    "EKB001": "АРТэврика",
+    "KZN014": "Meliorem",
+    "NN013": "Студия Ольги Шарлай",
+    "CHL006": "Перистиль",
+    "RND003": "Контраст",
+    "KRD005": "ZERC",
+    "MSK006": "Alina Salomatina Interiors"
   }
 }
