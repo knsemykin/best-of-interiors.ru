@@ -1,0 +1,7 @@
+---
+import MoscowWindows from '../../../../../components/MoscowWindows.astro';
+import {windowDirections} from '../../../../../data/windows-moscow';
+export function getStaticPaths(){return windowDirections.map(page=>({params:{direction:page.slug},props:{page}}));}
+const {page}=Astro.props;
+---
+<MoscowWindows page={page}/>
