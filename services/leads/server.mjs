@@ -5,7 +5,7 @@ import nodemailer from 'nodemailer';
 import catalog from './studios.json' with {type:'json'};
 const origins=new Set(['https://best-of-interiors.ru','https://www.best-of-interiors.ru']);
 const architectureRoutes=Object.fromEntries(['chastnye-doma','development','gorodskaya-sreda'].map(s=>['/ratings/arhitekturnye-byuro/moskva/'+s+'/', 'architecture-'+s]));
-const targets=new Set(['/ratings/dizayn-interera/samara/','/ratings/dizayn-interera/','/ratings/dizayn-interera/krasnodar/','/ratings/dizayn-interera/rostov-na-donu/','/ratings/dizayn-interera/chelyabinsk/','/ratings/dizayn-interera/nizhny-novgorod/','/ratings/dizayn-interera/kazan/','/ratings/dizayn-interera/yekaterinburg/',...Object.keys(architectureRoutes),'/ratings/dizayn-interera/sankt-peterburg/','/ratings/dizayn-interera/moskva/','/ratings/dizayn-interera/voronezh/','/companies/alina-salomatina/']);
+const targets=new Set(['/ratings/okna/voronezh/','/ratings/dizayn-interera/samara/','/ratings/dizayn-interera/','/ratings/dizayn-interera/krasnodar/','/ratings/dizayn-interera/rostov-na-donu/','/ratings/dizayn-interera/chelyabinsk/','/ratings/dizayn-interera/nizhny-novgorod/','/ratings/dizayn-interera/kazan/','/ratings/dizayn-interera/yekaterinburg/',...Object.keys(architectureRoutes),'/ratings/dizayn-interera/sankt-peterburg/','/ratings/dizayn-interera/moskva/','/ratings/dizayn-interera/voronezh/','/companies/alina-salomatina/']);
 export function validate(input){
  if(!input||typeof input!=='object'||Array.isArray(input))throw Error('Неверный формат заявки.');
  const text=(key,max,required=false)=>{const v=input[key]??'';if(typeof v!=='string'||v.length>max||(required&&!v.trim()))throw Error('Проверьте поле: '+key);return v.trim();};
@@ -17,7 +17,7 @@ export function validate(input){
  if(input.consent!==true)throw Error('Необходимо согласие на обработку данных.');
  if(!(targets.has(d.page)||(d.kind==='cooperation'&&['/','/partners/'].includes(d.page)))||!/^[0-9a-f-]{36}$/i.test(d.requestId))throw Error('Обновите страницу и повторите отправку.');
  const city=d.page.includes('/samara/')?'samara':d.page==='/ratings/dizayn-interera/'?'russia':d.page.includes('/krasnodar/')?'krasnodar':d.page.includes('/rostov-na-donu/')?'rostov-na-donu':d.page.includes('/chelyabinsk/')?'chelyabinsk':d.page.includes('/nizhny-novgorod/')?'nizhny-novgorod':d.page.includes('/kazan/')?'kazan':d.page.includes('yekaterinburg')?'yekaterinburg':d.page.includes('sankt-peterburg')?'sankt-peterburg':d.page.includes('voronezh')?'voronezh':'moskva';d.city=city;
- const studioList=catalog[architectureRoutes[d.page]||city];
+ const studioList=catalog[d.page==='/ratings/okna/voronezh/'?'windows-voronezh':architectureRoutes[d.page]||city];
  if(d.studio!=='brief'&&!studioList[d.studio])throw Error('Студия не найдена в этом рейтинге.');
  if(d.kind!=='lead'){
   if(!d.company||!d.role||!d.email||d.comment.length<20||(d.kind==='correction'&&d.studio==='brief'))throw Error('Укажите компанию, вашу роль, почту и подробное сообщение.');
@@ -26,7 +26,7 @@ export function validate(input){
  d.selected=Array.isArray(input.selected)?input.selected:[];
  if(d.selected.length>4||d.selected.some(id=>typeof id!=='string'||!studioList[id]))throw Error('Проверьте список выбранных студий.');
  if(d.studio==='brief'){
-  if(!['editorial','selected'].includes(d.audience)||d.brief.length<20||!d.location||Number(d.area)<10||Number(d.area)>(architectureRoutes[d.page]?100000000:100000)||!Number.isFinite(Number(d.area)))throw Error('Заполните площадь, город и подробное описание проекта.');
+  if(!['editorial','selected'].includes(d.audience)||d.brief.length<20||!d.location||Number(d.area)<(d.page==='/ratings/okna/voronezh/'?1:10)||Number(d.area)>(architectureRoutes[d.page]?100000000:100000)||!Number.isFinite(Number(d.area)))throw Error('Заполните площадь, город и подробное описание проекта.');
   if(d.audience==='selected'&&!d.selected.length)throw Error('Выберите студии для сравнения.');
  }
  if(d.studio==='brief'&&!['any','economy','middle','premium'].includes(d.priceSegment))throw Error('Выберите ценовой сегмент.');
@@ -36,9 +36,9 @@ export function validate(input){
 export function letter(d,id){if(d.kind!=='lead')return [`${d.kind==='correction'?'Исправление информации':'Сотрудничество'} Best of Interiors № ${id}`,`Дата: ${new Date().toISOString()}`,`Страница: https://best-of-interiors.ru${d.page}`,`Карточка: ${d.studioName} (${d.studio})`,`Компания: ${d.company}`,`Представитель: ${d.name}`,`Роль: ${d.role}`,`Телефон: ${d.phone}`,`Email: ${d.email}`,`Сообщение: ${d.comment}`,`Материалы: ${d.sources||'Не указаны'}`,'Согласие на обработку обращения: дано. Версия: 2026-10-10. Только редакции; изменения требуют проверки.'].join('\n');return [
  `Новая заявка Best of Interiors № ${id}`,`Дата: ${new Date().toISOString()}`,
  `Город рейтинга: ${d.city==='samara'?'Самара':d.city==='russia'?'Россия':d.city==='krasnodar'?'Краснодар':d.city==='rostov-na-donu'?'Ростов-на-Дону':d.city==='chelyabinsk'?'Челябинск':d.city==='nizhny-novgorod'?'Нижний Новгород':d.city==='kazan'?'Казань':d.city==='yekaterinburg'?'Екатеринбург':d.city==='sankt-peterburg'?'Санкт-Петербург':d.city==='voronezh'?'Воронеж':'Москва'}`,`Страница: https://best-of-interiors.ru${d.page}`,
- `Студия: ${d.studioName} (${d.studio})`,`Имя: ${d.name}`,`Телефон: ${d.phone}`,`Email: ${d.email||'Не указан'}`,
- `Тип объекта: ${d.property}`,`Площадь: ${d.area}`,`Город / ЖК: ${d.location}`,`Бюджет: ${d.budget}`,`Начало: ${d.start}`,`Услуги: ${d.service}`,
- `Подбор: ${d.audience==='editorial'?'Редакцией под задачу и бюджет':'Конкретные студии'}`,`Сегмент: ${{any:'От эконома до премиума с учётом бюджета',economy:'Эконом',middle:'Средний',premium:'Премиум'}[d.priceSegment]||'Не указан'}`,`Выбранные студии: ${d.selectedNames.join(', ')||'Не выбраны'}`,
+ `Компания: ${d.studioName} (${d.studio})`,`Имя: ${d.name}`,`Телефон: ${d.phone}`,`Email: ${d.email||'Не указан'}`,
+ `Тип объекта: ${d.property}`,`${d.page==='/ratings/okna/voronezh/'?'Количество конструкций':'Площадь'}: ${d.area}`,`Город / ЖК: ${d.location}`,`Бюджет: ${d.budget}`,`Начало: ${d.start}`,`Услуги: ${d.service}`,
+ `Подбор: ${d.audience==='editorial'?'Редакцией под задачу и бюджет':'Конкретные студии'}`,`Сегмент: ${{any:'От эконома до премиума с учётом бюджета',economy:'Эконом',middle:'Средний',premium:'Премиум'}[d.priceSegment]||'Не указан'}`,`Выбранные компании: ${d.selectedNames.join(', ')||'Не выбраны'}`,
  `\nОписание проекта:\n${d.brief||d.comment||'Не указано'}`,
  '\nСогласие на обработку данных: дано. Согласие на передачу выбранным клиентом или редакцией студиям для КП: дано. Версия: 2026-10-09-v2. Получатель заявки — редакция Best of Interiors. Автоматическая рассылка студиям не выполнялась.'
  ].join('\n');}

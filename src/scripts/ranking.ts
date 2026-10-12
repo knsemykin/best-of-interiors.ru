@@ -1,5 +1,6 @@
 import './gallery';
 const editorial=document.body.dataset.directory==='editorial';
+const windows=document.body.dataset.directory==='windows';
 const architecture=document.body.dataset.directory==='architecture';
 const $ = <T extends HTMLElement = HTMLElement>(selector:string)=>document.querySelector<T>(selector)!;
 const cards=[...document.querySelectorAll<HTMLElement>('[data-studio]')];
@@ -74,7 +75,7 @@ function renderComparison(){
  const chosen=cards.filter(c=>selected.has(c.id));
  chosen.forEach(card=>{const th=cell('th',card.dataset.name!);const remove=document.createElement('button');remove.textContent='Убрать из сравнения';remove.dataset.remove=card.id;remove.addEventListener('click',()=>{selected.delete(card.id);refreshSelection();renderComparison();});th.append(remove);row.append(th);});head.append(row);table.append(head);
  const body=document.createElement('tbody');
- const rows:[string,(c:HTMLElement)=>string][]=[['Направление',c=>c.dataset.kind?({studio:'Студия / бюро',author:'Авторская команда',renovation:'Ремонт и дизайн',bureau:'Архитектурное бюро'}[c.dataset.kind]||'Студия'):c.dataset.segment==='home'?'Жилые интерьеры':'Бизнес / архитектура'],[editorial?'Место в подборке':'Индекс сведений',c=>editorial?c.dataset.position||'':`${Number(c.dataset.score).toLocaleString('ru-RU')} / 100`],[architecture?'Архитектурный тариф':'Дизайн-проект',c=>architecture?(c.dataset.price?`от ${Number(c.dataset.price).toLocaleString('ru-RU')} ₽/м² · ${document.querySelector<HTMLSelectElement>('#price-product')?.selectedOptions[0]?.text}`:'По запросу по выбранному продукту'):c.querySelector('.studio-facts dd')?.textContent||'Уточнить'],['Офис',c=>c.querySelector('.studio-location')?.textContent||'Уточнить'],['Сопровождение',c=>c.dataset.supervision==='true'?'Заявлено':'Уточните у студии'],['Комплектация',c=>c.dataset.procurement==='true'?'Заявлено':'Уточните у студии'],['Реализация',c=>c.dataset.renovation==='true'?'Заявлено':'Уточните у студии']];
+ const rows:[string,(c:HTMLElement)=>string][]=windows?[['Компания',c=>c.dataset.name||''],['Индекс сведений',c=>`${c.dataset.score} / 100`],['Профили',c=>c.dataset.profiles||'Уточните'],['Гарантия',c=>c.dataset.warranty||'Уточните'],['Адрес',c=>c.querySelector('.studio-location')?.textContent||'Уточните']]:[['Направление',c=>c.dataset.kind?({studio:'Студия / бюро',author:'Авторская команда',renovation:'Ремонт и дизайн',bureau:'Архитектурное бюро'}[c.dataset.kind]||'Студия'):c.dataset.segment==='home'?'Жилые интерьеры':'Бизнес / архитектура'],[editorial?'Место в подборке':'Индекс сведений',c=>editorial?c.dataset.position||'':`${Number(c.dataset.score).toLocaleString('ru-RU')} / 100`],[architecture?'Архитектурный тариф':'Дизайн-проект',c=>architecture?(c.dataset.price?`от ${Number(c.dataset.price).toLocaleString('ru-RU')} ₽/м² · ${document.querySelector<HTMLSelectElement>('#price-product')?.selectedOptions[0]?.text}`:'По запросу по выбранному продукту'):c.querySelector('.studio-facts dd')?.textContent||'Уточнить'],['Офис',c=>c.querySelector('.studio-location')?.textContent||'Уточнить'],['Сопровождение',c=>c.dataset.supervision==='true'?'Заявлено':'Уточните у студии'],['Комплектация',c=>c.dataset.procurement==='true'?'Заявлено':'Уточните у студии'],['Реализация',c=>c.dataset.renovation==='true'?'Заявлено':'Уточните у студии']];
  rows.forEach(([name,value])=>{const tr=document.createElement('tr');const th=cell('th',name);th.setAttribute('scope','row');tr.append(th);chosen.forEach(c=>tr.append(cell('td',value(c))));body.append(tr);});table.append(body);const wrapper=document.createElement('div');wrapper.className='compare-table-wrap';wrapper.append(table);container.append(wrapper);
 }
 $('#compare-open').addEventListener('click',()=>{renderComparison();compare.showModal();});
@@ -87,7 +88,7 @@ function showStep(){
  $('#quiz-progress').hidden=!quiz;
  document.querySelectorAll('#quiz-progress span').forEach((el,i)=>el.classList.toggle('active',i<=step));
  $('#quiz-back').hidden=!quiz||step===0;$('#quiz-next').hidden=!quiz||step===2;$('#lead-submit').hidden=quiz&&step!==2;$('#short-note').hidden=quiz;
- $<HTMLTextAreaElement>('[name=comment]').disabled=quiz;
+ form.querySelector<HTMLTextAreaElement>('[name=comment]')!.disabled=quiz;
  $('#form-error').textContent='';
 }
 function openLead(id?:string,fromCompare=false){
@@ -127,7 +128,7 @@ function validStep(){
  const fields=[...form.querySelectorAll<HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement>(`[data-step="${step}"] input,[data-step="${step}"] select,[data-step="${step}"] textarea`)];
  const invalid=fields.find(field=>!field.disabled&&!field.checkValidity());if(invalid){invalid.reportValidity();return false;}
  if(quiz&&step===1&&$<HTMLSelectElement>('#brief-audience').value==='selected'&&!requestStudios.size){$('#form-error').textContent='Выберите хотя бы одну компанию или доверьте подбор редакции.';return false;}
- if(step===2){const phone=$<HTMLInputElement>('[name=phone]');if(phone.value.replace(/\D/g,'').length<7||!/^[-+0-9()\s]+$/.test(phone.value)){$('#form-error').textContent='Укажите телефон: не менее 7 цифр.';phone.focus();return false;}}
+ if(step===2){const phone=form.querySelector<HTMLInputElement>('[name=phone]')!;if(phone.value.replace(/\D/g,'').length<7||!/^[-+0-9()\s]+$/.test(phone.value)){$('#form-error').textContent='Укажите телефон: не менее 7 цифр.';phone.focus();return false;}}
  return true;
 }
 $('#quiz-next').addEventListener('click',()=>{if(validStep()){step++;showStep();form.querySelector<HTMLElement>(`[data-step="${step}"] input,[data-step="${step}"] textarea`)?.focus();}});
