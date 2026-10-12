@@ -1,0 +1,7 @@
+---
+import FurnitureRating from '../../../../components/FurnitureRating.astro';
+import {furniturePages} from '../../../../data/furniture';
+export function getStaticPaths(){return furniturePages.map(page=>({params:{furniture:page.slug},props:{page}}));}
+const {page}=Astro.props;
+---
+<FurnitureRating page={page}/>

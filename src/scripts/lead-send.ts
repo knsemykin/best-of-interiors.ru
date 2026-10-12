@@ -1,3 +1,4 @@
+import {sendSubmission} from './form-submit';
 const form=document.querySelector<HTMLFormElement>('#lead-form');
 if(form){
  let sending=false;
@@ -13,19 +14,10 @@ if(form){
   const disabled=[...form.querySelectorAll<HTMLFieldSetElement>('fieldset:disabled')];disabled.forEach(f=>f.disabled=false);
   const data=Object.fromEntries(new FormData(form).entries());disabled.forEach(f=>f.disabled=true);
   const payload={...data,consent:data.consent==='on',transferConsent:data.transferConsent==='on',selected,requestId,page:location.pathname};
-  if(form.dataset.emailDraft==='true'){
-   const nameOf=(id:string)=>document.getElementById(id)?.dataset.name||id;
-   const ids=data.studio==='brief'?selected:[String(data.studio)];
-   const lines=[`Рейтинг: ${location.href.split('#')[0]}`,`Получатели: ${data.audience==='editorial'&&data.studio==='brief'?'Подбор редакцией':ids.map(nameOf).join(', ')}`,`Имя: ${data.name}`,`Телефон: ${data.phone}`,`Email: ${data.email||''}`,`Объект: ${data.property||''}`,`Количество конструкций: ${data.area||''}`,`Город: ${data.location||''}`,`Бюджет: ${data.budget||''}`,`Сегмент: ${data.priceSegment||''}`,`Услуга: ${data.service||''}`,`Начало: ${data.start||''}`,`Описание: ${data.brief||data.comment||''}`,'Согласие на обработку и передачу выбранным компаниям для КП: дано.'];
-   let panel=document.querySelector<HTMLDivElement>('#email-draft');if(!panel){panel=document.createElement('div');panel.id='email-draft';form.append(panel);}panel.replaceChildren();
-   const note=document.createElement('p');note.textContent='Письмо подготовлено, но ещё не отправлено. Откройте почтовую программу или скопируйте текст и отправьте на hello@best-of-interiors.ru.';
-   const link=document.createElement('a');link.className='r-button';link.textContent='Открыть письмо в почте ↗';link.href='mailto:hello@best-of-interiors.ru?subject='+encodeURIComponent('Заявка: окна в Воронеже')+'&body='+encodeURIComponent(lines.join('\n'));
-   const draft=document.createElement('textarea');draft.readOnly=true;draft.rows=8;draft.value=lines.join('\n');draft.setAttribute('aria-label','Текст письма редакции');panel.append(note,link,draft);panel.scrollIntoView({block:'nearest'});return;
-  }
   sending=true;const submit=document.querySelector<HTMLButtonElement>('#lead-submit')!;submit.disabled=true;submit.textContent='Отправляем…';error.textContent='';
   try{
-   const response=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),signal:AbortSignal.timeout(30000)});
-   const result=await response.json();if(!response.ok||!result.ok)throw Error(result.error||'Не удалось отправить заявку. Попробуйте позже.');
+   const nameOf=(id:string)=>document.getElementById(id)?.dataset.name||id;
+   const result=await sendSubmission({...payload,studio:data.studio==='brief'?'Подбор компаний':nameOf(String(data.studio)),selected:selected.map(nameOf)},'Best of Interiors — новая заявка',requestId);
    form.hidden=true;const panel=document.querySelector<HTMLElement>('#lead-result')!;panel.hidden=false;panel.focus();
    document.querySelector<HTMLElement>('#lead-reference')!.textContent=`Номер заявки: ${result.id.slice(0,8)}`;
   }catch(e){error.textContent=e instanceof Error&&e.name!=='TimeoutError'?e.message:'Не удалось получить подтверждение. Проверьте соединение и попробуйте позже.';}
