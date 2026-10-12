@@ -1,4 +1,6 @@
 ---
+import PartnerInvitation from '../components/PartnerInvitation.astro';
+import SiteHeader from '../components/SiteHeader.astro';
 import '@fontsource-variable/manrope';
 import '../styles/global.css';
 import LegalNotice from '../components/LegalNotice.astro';
@@ -6,7 +8,7 @@ import ProjectCredit from '../components/ProjectCredit.astro';
 import Metrika from '../components/Metrika.astro';
 const {title,description,path,indexable=false}=Astro.props;
 ---
-<!doctype html><html lang="ru"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>{title} | Best of Interiors</title><meta name="description" content={description}/><meta name="robots" content={indexable&&import.meta.env.SITE_INDEXABLE!=='false'?'index,follow':'noindex,follow'}/><link rel="canonical" href={`https://best-of-interiors.ru${path}`}/></head><body><main class="document wrap" id="main"><a href="/">← Best of Interiors</a><h1>{title}</h1><p class="document-date">Редакция от 12 октября 2026 года</p><slot/></main><footer class="footer wrap"><LegalNotice/><ProjectCredit/></footer><Metrika/></body></html>
+<!doctype html><html lang="ru"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>{title} | Best of Interiors</title><meta name="description" content={description}/><meta name="robots" content={indexable&&import.meta.env.SITE_INDEXABLE!=='false'?'index,follow':'noindex,follow'}/><link rel="canonical" href={`https://best-of-interiors.ru${path}`}/></head><body><SiteHeader/><main class="document wrap" id="main"><a href="/">← Best of Interiors</a><h1>{title}</h1><p class="document-date">Редакция от 12 октября 2026 года</p><slot/></main><footer class="footer wrap"><PartnerInvitation/><LegalNotice/><ProjectCredit/></footer><Metrika/></body></html>
 <style>
 .document{max-width:1000px;padding-block:60px}.document h1{font-size:clamp(34px,5vw,60px);line-height:1.15;letter-spacing:-.04em;margin:40px 0 24px;overflow-wrap:anywhere}.document :global(h2){font-size:28px;line-height:1.3;letter-spacing:-.02em;margin:40px 0 20px}.document :global(p),.document :global(li){font-size:19px;line-height:1.8;color:#c7cbd5;margin-bottom:20px}.document :global(a){color:#b4c7ff;text-underline-offset:4px;overflow-wrap:anywhere}.document :global(ul),.document :global(ol){padding-left:24px}.document .document-date{font-size:16px;color:#abb4c6}
 </style>

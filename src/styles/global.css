@@ -25,3 +25,5 @@ html[data-motion=paused] *,html[data-motion=paused] *:before{animation-play-stat
 .studio-website{display:inline-block;font-size:15px;line-height:1.5;color:#a6bfff;overflow-wrap:anywhere;margin-top:12px}.studio-website[href]{text-decoration:underline;text-underline-offset:4px}.all-styles summary{cursor:pointer;color:#a6bfff}.all-styles p{font-size:15px;line-height:1.8;margin-top:12px}.promo-tagline{font-size:clamp(21px,2vw,28px)!important;color:#f0f3fa!important}
 /* Flat footer navigation also wraps with consistent spacing beside the credit. */
 .footer:not(:has(.footer-top)){display:flex;flex-wrap:wrap;align-items:center;gap:24px}
+
+.partner-telegram{display:inline-flex;align-items:center;min-height:48px;padding:12px 18px;color:#b8ceff;font-size:16px;text-decoration:underline;text-underline-offset:5px;margin-bottom:24px}

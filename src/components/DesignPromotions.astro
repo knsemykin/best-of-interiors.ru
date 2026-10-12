@@ -9,4 +9,4 @@ const local=studios.find(s=>/alina salomatina/i.test(s.name));
 const studio={...canonical,studio_id:local?.studio_id||canonical.studio_id};
 const portfolio=allPortfolios.find(p=>p.id==='MSK006')!;
 ---
-<section id="promotions" class="rank-section wrap"><div class="rank-section-head"><div><span class="micro accent">01 / ЗНАКОМСТВО КРУПНЫМ ПЛАНОМ</span><h2>Возможно, ваши люди.</h2></div></div><a class="r-secondary" href="/partners/" style="margin-bottom:28px">Обсудить сотрудничество ↗</a><div class="promo-grid"><PromoFeature portfolio={portfolio} studio={studio} index={0}/></div></section>
+<section id="promotions" class="rank-section wrap"><div class="rank-section-head"><div><span class="micro accent">01 / ЗНАКОМСТВО КРУПНЫМ ПЛАНОМ</span><h2>Возможно, ваши люди.</h2></div></div><a class="r-button" href="/partners/" style="margin-bottom:28px">Сотрудничество и тарифы ↗</a> <a class="partner-telegram" href="https://t.me/knsemykin" target="_blank" rel="noopener noreferrer">Обсудить в Telegram ↗</a><div class="promo-grid"><PromoFeature portfolio={portfolio} studio={studio} index={0}/></div></section>

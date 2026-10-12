@@ -1,0 +1,24 @@
+---
+const {links=[{href:'/#categories',label:'Рейтинги'},{href:'/#about',label:'О проекте'},{href:'/methodology/',label:'Методика'}]}=Astro.props;
+const partner=Astro.url.pathname==='/partners/';
+const partnerUrl=partner?'#contact':'/partners/';
+---
+<header class="site-header wrap">
+  <a class="brand" href="/" aria-label="Best of Interiors — главная">best of<span>interiors<i>✳</i></span></a>
+  <nav class="desktop-links" aria-label="Главная навигация">{links.filter(l=>l.href!=='/partners/').map(l=><a href={l.href}>{l.label}</a>)}</nav>
+  <div class="header-actions"><div class="client-action"><slot/></div><a class="partner-link" href={partnerUrl}>{partner?'Стать партнёром':'Сотрудничество'}<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.6"/></svg></a></div>
+  <details class="site-menu"><summary aria-label="Меню сайта"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.6"/></svg></summary><nav aria-label="Мобильная навигация"><a class="menu-partner" href={partnerUrl}><strong>Сотрудничество</strong><span>ПРОМО, тарифы и продвижение компании</span></a><a href="https://t.me/knsemykin" target="_blank" rel="noopener noreferrer">Обсудить в Telegram ↗</a>{links.filter(l=>l.href!=='/partners/').map(l=><a href={l.href}>{l.label}</a>)}<a href="/">Главная</a></nav></details>
+</header>
+<script>
+ document.querySelectorAll<HTMLDetailsElement>('.site-menu').forEach(menu=>{
+ menu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>menu.open=false));
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&menu.open){menu.open=false;menu.querySelector('summary')?.focus();}});
+ document.addEventListener('click',e=>{if(!menu.contains(e.target as Node))menu.open=false;});
+ });
+</script>
+<style>
+.site-header{position:relative;display:flex;align-items:center;justify-content:space-between;gap:24px;min-height:116px;border-bottom:1px solid var(--line)}.desktop-links{display:flex;gap:24px;align-items:center;font-size:15px}.desktop-links a:hover{color:var(--accent)}.header-actions{display:flex;align-items:center;gap:18px}.partner-link{display:inline-flex;align-items:center;gap:16px;border:1px solid #adc1ff;background:#a6bfff;color:#101726;border-radius:32px;padding:15px 21px;font-size:16px;font-weight:700;white-space:nowrap}.partner-link:hover{background:#c8d7ff}.partner-link svg{width:18px;height:18px}.site-menu{display:none}.site-menu summary{list-style:none;padding:10px;cursor:pointer;border:1px solid #555e6e;border-radius:12px}.site-menu summary::-webkit-details-marker{display:none}.site-menu svg{width:24px;height:24px;display:block}.site-menu nav{position:absolute;top:calc(100% + 10px);left:0;right:0;background:#1b2029;border:1px solid #46516a;border-radius:18px;padding:16px;z-index:50;box-shadow:0 24px 60px #0009;display:grid;gap:4px}.site-menu nav a{padding:15px;border-radius:10px;font-size:18px}.site-menu .menu-partner{background:#a6bfff;color:#101726;margin-bottom:10px}.menu-partner strong,.menu-partner span{display:block}.menu-partner span{font-size:14px;margin-top:5px}.site-menu nav a:hover{background:#303c51}.site-menu nav .menu-partner:hover{background:#c8d7ff}
+@media(max-width:1200px){.client-action{display:none}.desktop-links{gap:18px}}
+@media(max-width:900px){.site-header{min-height:92px;gap:12px}.desktop-links{display:none}.site-menu{display:block}.header-actions{margin-left:auto}.site-header .brand{width:125px;font-size:24px}.site-header .brand i{font-size:24px;margin-left:5px}.partner-link{font-size:13px;padding:12px 14px;gap:7px}.partner-link svg{width:14px;height:14px}}
+@media(max-width:380px){.site-header{gap:7px}.site-header .brand{width:105px;font-size:21px}.partner-link{padding:12px 10px;font-size:12px}.partner-link svg{display:none}}
+</style>
