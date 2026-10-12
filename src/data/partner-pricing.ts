@@ -1,4 +1,4 @@
-export const partnerPrices = {moscow:[40000,35000,30000],region:[20000,15000,10000]} as const;
+export const partnerPrices = {moscow:[60000,40000,20000],region:[20000,15000,10000]} as const;
 export const paymentTerms = [
  {months:1,discount:0,label:'1 месяц — без скидки'},
  {months:3,discount:10,label:'3 месяца — скидка 10%'},
