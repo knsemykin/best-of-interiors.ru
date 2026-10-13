@@ -1,0 +1,17 @@
+<!-- Top.Mail.Ru analytics and VK pixel: shared loader -->
+<script is:inline>
+(function(d,w){
+  if (!['best-of-interiors.ru','www.best-of-interiors.ru'].includes(w.location.hostname)) return;
+  var queue=w._tmr||(w._tmr=[]);
+  var start=(new Date()).getTime();
+  queue.push({id:'3801973',type:'pageView',start:start});
+  queue.push({id:'3801974',type:'pageView',start:start});
+  var id='tmr-code';
+  if(d.getElementById(id))return;
+  var ts=d.createElement('script');ts.type='text/javascript';ts.async=true;ts.id=id;
+  ts.src='https://top-fwz1.mail.ru/js/code.js';
+  var f=function(){var s=d.getElementsByTagName('script')[0];s.parentNode.insertBefore(ts,s);};
+  if(w.opera=='[object Opera]'){d.addEventListener('DOMContentLoaded',f,false);}else{f();}
+})(document,window);
+</script>
+<noscript><div><img src="https://top-fwz1.mail.ru/counter?id=3801973;js=na" style="position:absolute;left:-9999px;" alt="Top.Mail.Ru"/><img src="https://top-fwz1.mail.ru/counter?id=3801974;js=na" style="position:absolute;left:-9999px;" alt="Top.Mail.Ru"/></div></noscript>

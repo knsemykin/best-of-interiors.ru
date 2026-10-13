@@ -1,8 +1,10 @@
 ---
+import MailCounters from './MailCounters.astro';
 const {links=[{href:'/#categories',label:'Рейтинги'},{href:'/#about',label:'О проекте'},{href:'/methodology/',label:'Методика'}]}=Astro.props;
 const partner=Astro.url.pathname==='/partners/';
 const partnerUrl=partner?'#contact':'/partners/';
 ---
+<MailCounters/>
 <header class="site-header wrap">
   <a class="brand" href="/" aria-label="Best of Interiors — главная">best of<span>interiors<i>✳</i></span></a>
   <nav class="desktop-links" aria-label="Главная навигация">{links.filter(l=>l.href!=='/partners/').map(l=><a href={l.href}>{l.label}</a>)}</nav>
