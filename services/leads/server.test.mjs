@@ -55,3 +55,12 @@ test('Salomatina promo is a valid recipient outside the organic city ranking',()
  const d=validate({...sample(),page:'/ratings/dizayn-interera/'+city+'/'});assert.equal(d.studioName,'Alina Salomatina Interiors');
  }
 });
+
+test('current transport accepts every form family and preserves named recipients',()=>{
+ for(const page of ['/ratings/kuhni/moskva/','/ratings/okna/moskva/alyuminievye-okna/','/ratings/dizayn-interera/moskva/']){
+ const d=validate({...sample(),transportVersion:2,page,studio:'Компания из рейтинга',selected:['Студия 1','Студия 2'],brief:'Полное описание проекта и пожеланий',location:'Воронеж'});
+ assert.match(letter(d,'test'),/Компания из рейтинга/);assert.match(letter(d,'test'),/Студия 1, Студия 2/);assert.match(letter(d,'test'),/Воронеж/);
+ }
+ for(const change of [{page:'/not-allowed/'},{consent:false},{transferConsent:false},{selected:['x'.repeat(201)]},{studio:''},{phone:'bad'}])assert.throws(()=>validate({...sample(),transportVersion:2,...change}));
+ assert.equal(validate({...sample(),transportVersion:2,kind:'cooperation',page:'/partners/',studio:'Компания',company:'Компания',role:'Руководитель',comment:'Обсудить условия продвижения компании',transferConsent:false}).kind,'cooperation');
+});

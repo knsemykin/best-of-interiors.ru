@@ -38,7 +38,7 @@ document.querySelectorAll<HTMLButtonElement>('[data-correction],[data-cooperatio
 }));
 dialog.querySelector('.editorial-close')!.addEventListener('click',()=>{if(!sending)dialog.close();});dialog.addEventListener('cancel',e=>{if(sending)e.preventDefault();});
 form.addEventListener('submit',async e=>{e.preventDefault();if(sending||!form.reportValidity())return;const error=dialog.querySelector('#editorial-error')!;error.textContent='';const data=Object.fromEntries(new FormData(form));const button=form.querySelector<HTMLButtonElement>('[type=submit]')!;sending=true;button.disabled=true;button.textContent='Отправляем…';
- try{const result=await sendSubmission({...data,consent:data.consent==='on',page:location.pathname},'Best of Interiors — '+(data.kind==='correction'?'исправление информации':'сотрудничество'),requestId);form.hidden=true;const panel=dialog.querySelector<HTMLElement>('#editorial-result')!;panel.hidden=false;panel.focus();dialog.querySelector('#editorial-reference')!.textContent=`Номер обращения: ${result.id.slice(0,8)}`;
+ try{const result=await sendSubmission({...data,studio:data.company||data.studio,consent:data.consent==='on',page:location.pathname},'Best of Interiors — '+(data.kind==='correction'?'исправление информации':'сотрудничество'),requestId);form.hidden=true;const panel=dialog.querySelector<HTMLElement>('#editorial-result')!;panel.hidden=false;panel.focus();dialog.querySelector('#editorial-reference')!.textContent=`Номер обращения: ${result.id.slice(0,8)}`;
  }catch(e){error.textContent=e instanceof Error&&e.name!=='TimeoutError'?e.message:'Не удалось получить подтверждение. Попробуйте позже.';}finally{sending=false;button.disabled=false;button.textContent='Отправить редакции ↗';}
 });
 </script>

@@ -6,8 +6,25 @@ import catalog from './studios.json' with {type:'json'};
 const origins=new Set(['https://best-of-interiors.ru','https://www.best-of-interiors.ru']);
 const architectureRoutes=Object.fromEntries(['chastnye-doma','development','gorodskaya-sreda'].map(s=>['/ratings/arhitekturnye-byuro/moskva/'+s+'/', 'architecture-'+s]));
 const targets=new Set(['/ratings/okna/voronezh/','/ratings/dizayn-interera/samara/','/ratings/dizayn-interera/','/ratings/dizayn-interera/krasnodar/','/ratings/dizayn-interera/rostov-na-donu/','/ratings/dizayn-interera/chelyabinsk/','/ratings/dizayn-interera/nizhny-novgorod/','/ratings/dizayn-interera/kazan/','/ratings/dizayn-interera/yekaterinburg/',...Object.keys(architectureRoutes),'/ratings/dizayn-interera/sankt-peterburg/','/ratings/dizayn-interera/moskva/','/ratings/dizayn-interera/voronezh/','/companies/alina-salomatina/']);
+function validateCurrent(input){
+ const d={};
+ const limits={name:80,phone:25,email:180,comment:5000,kind:20,company:150,role:100,sources:2000,brief:5000,property:80,location:150,area:10,budget:100,start:100,service:150,audience:30,priceSegment:30,studio:200,page:200,website:200,requestId:50};
+ for(const [k,max] of Object.entries(limits)){const v=input[k]??'';if(typeof v!=='string'||v.length>max)throw Error('Проверьте поле: '+k);d[k]=v.trim();}
+ if(d.name.length<2||!/^[-+0-9()\s]{7,25}$/.test(d.phone)||d.phone.replace(/\D/g,'').length<7)throw Error('Укажите имя и корректный телефон.');
+ if(d.email&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email))throw Error('Проверьте электронную почту.');
+ d.kind=d.kind||'lead';if(!['lead','correction','cooperation'].includes(d.kind))throw Error('Неверный тип обращения.');
+ if(input.consent!==true)throw Error('Необходимо согласие на обработку данных.');
+ if(d.kind==='lead'&&input.transferConsent!==true)throw Error('Необходимо согласие на передачу заявки.');
+ if(!/^\/(?:$|partners\/$|corrections\/$|ratings\/[a-z0-9/-]+\/$|companies\/[a-z0-9-]+\/$)$/.test(d.page)||!/^[0-9a-f-]{36}$/i.test(d.requestId)||!d.studio)throw Error('Обновите страницу и повторите отправку.');
+ d.selected=Array.isArray(input.selected)?input.selected:[];
+ if(d.selected.length>4||d.selected.some(v=>typeof v!=='string'||!v.trim()||v.length>200))throw Error('Проверьте список выбранных компаний.');
+ if(d.kind!=='lead'&&(!d.company||!d.role||!d.email||d.comment.length<20))throw Error('Укажите компанию, роль, почту и подробное сообщение.');
+ d.transportVersion=2;d.studioName=d.studio;d.selectedNames=d.selected;d.city=d.page.split('/').filter(Boolean).at(-1)||'Россия';
+ return d;
+}
 export function validate(input){
  if(!input||typeof input!=='object'||Array.isArray(input))throw Error('Неверный формат заявки.');
+ if(input.transportVersion===2)return validateCurrent(input);
  const text=(key,max,required=false)=>{const v=input[key]??'';if(typeof v!=='string'||v.length>max||(required&&!v.trim()))throw Error('Проверьте поле: '+key);return v.trim();};
  const d={};for(const [k,max,req] of [['name',80,true],['phone',25,true],['email',180,false],['comment',5000,false],['kind',20,false],['company',150,false],['role',100,false],['sources',2000,false],['brief',5000,false],['property',80,false],['location',150,false],['area',10,false],['budget',100,false],['start',100,false],['service',100,false],['audience',20,false],['priceSegment',20,false],['studio',20,true],['page',150,true],['website',200,false],['requestId',50,true]])d[k]=text(k,max,req);
  if(d.name.length<2||!/^[-+0-9()\s]{7,25}$/.test(d.phone)||d.phone.replace(/\D/g,'').length<7)throw Error('Укажите имя и корректный телефон.');
@@ -35,7 +52,7 @@ export function validate(input){
 }
 export function letter(d,id){if(d.kind!=='lead')return [`${d.kind==='correction'?'Исправление информации':'Сотрудничество'} Best of Interiors № ${id}`,`Дата: ${new Date().toISOString()}`,`Страница: https://best-of-interiors.ru${d.page}`,`Карточка: ${d.studioName} (${d.studio})`,`Компания: ${d.company}`,`Представитель: ${d.name}`,`Роль: ${d.role}`,`Телефон: ${d.phone}`,`Email: ${d.email}`,`Сообщение: ${d.comment}`,`Материалы: ${d.sources||'Не указаны'}`,'Согласие на обработку обращения: дано. Версия: 2026-10-10. Только редакции; изменения требуют проверки.'].join('\n');return [
  `Новая заявка Best of Interiors № ${id}`,`Дата: ${new Date().toISOString()}`,
- `Город рейтинга: ${d.city==='samara'?'Самара':d.city==='russia'?'Россия':d.city==='krasnodar'?'Краснодар':d.city==='rostov-na-donu'?'Ростов-на-Дону':d.city==='chelyabinsk'?'Челябинск':d.city==='nizhny-novgorod'?'Нижний Новгород':d.city==='kazan'?'Казань':d.city==='yekaterinburg'?'Екатеринбург':d.city==='sankt-peterburg'?'Санкт-Петербург':d.city==='voronezh'?'Воронеж':'Москва'}`,`Страница: https://best-of-interiors.ru${d.page}`,
+ `Город рейтинга: ${d.transportVersion===2?(d.location||d.city):d.city==='samara'?'Самара':d.city==='russia'?'Россия':d.city==='krasnodar'?'Краснодар':d.city==='rostov-na-donu'?'Ростов-на-Дону':d.city==='chelyabinsk'?'Челябинск':d.city==='nizhny-novgorod'?'Нижний Новгород':d.city==='kazan'?'Казань':d.city==='yekaterinburg'?'Екатеринбург':d.city==='sankt-peterburg'?'Санкт-Петербург':d.city==='voronezh'?'Воронеж':'Москва'}`,`Страница: https://best-of-interiors.ru${d.page}`,
  `Компания: ${d.studioName} (${d.studio})`,`Имя: ${d.name}`,`Телефон: ${d.phone}`,`Email: ${d.email||'Не указан'}`,
  `Тип объекта: ${d.property}`,`${d.page==='/ratings/okna/voronezh/'?'Количество конструкций':'Площадь'}: ${d.area}`,`Город / ЖК: ${d.location}`,`Бюджет: ${d.budget}`,`Начало: ${d.start}`,`Услуги: ${d.service}`,
  `Подбор: ${d.audience==='editorial'?'Редакцией под задачу и бюджет':'Конкретные студии'}`,`Сегмент: ${{any:'От эконома до премиума с учётом бюджета',economy:'Эконом',middle:'Средний',premium:'Премиум'}[d.priceSegment]||'Не указан'}`,`Выбранные компании: ${d.selectedNames.join(', ')||'Не выбраны'}`,
@@ -74,6 +91,6 @@ if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href){
  for(const key of ['SMTP_USER','SMTP_PASSWORD'])if(!process.env[key])throw Error('Missing '+key);
  const transport=nodemailer.createTransport({host:'smtp.timeweb.ru',port:465,secure:true,auth:{user:process.env.SMTP_USER,pass:process.env.SMTP_PASSWORD},connectionTimeout:10000,greetingTimeout:10000,socketTimeout:20000,disableFileAccess:true,disableUrlAccess:true});
  await transport.verify();
- const handler=createHandler(async(d,id)=>{const result=await transport.sendMail({from:{name:'Best of Interiors',address:process.env.SMTP_USER},to:'hello@best-of-interiors.ru',...(d.email?{replyTo:d.email}:{}),subject:`${d.kind==='correction'?'Исправление карточки':d.kind==='cooperation'?'Сотрудничество':'Заявка с сайта'} · ${d.city==='samara'?'Самара':d.city==='russia'?'Россия':d.city==='krasnodar'?'Краснодар':d.city==='rostov-na-donu'?'Ростов-на-Дону':d.city==='chelyabinsk'?'Челябинск':d.city==='nizhny-novgorod'?'Нижний Новгород':d.city==='kazan'?'Казань':d.city==='yekaterinburg'?'Екатеринбург':d.city==='sankt-peterburg'?'Санкт-Петербург':d.city==='voronezh'?'Воронеж':'Москва'} · ${id.slice(0,8)}`,text:letter(d,id)});if(!result.accepted?.length)throw Error('SMTP recipient not accepted');});
+ const handler=createHandler(async(d,id)=>{const result=await transport.sendMail({from:{name:'Best of Interiors',address:process.env.SMTP_USER},to:'hello@best-of-interiors.ru',...(d.email?{replyTo:d.email}:{}),subject:`${d.kind==='correction'?'Исправление карточки':d.kind==='cooperation'?'Сотрудничество':'Заявка с сайта'} · ${d.transportVersion===2?(d.location||d.city):d.city==='samara'?'Самара':d.city==='russia'?'Россия':d.city==='krasnodar'?'Краснодар':d.city==='rostov-na-donu'?'Ростов-на-Дону':d.city==='chelyabinsk'?'Челябинск':d.city==='nizhny-novgorod'?'Нижний Новгород':d.city==='kazan'?'Казань':d.city==='yekaterinburg'?'Екатеринбург':d.city==='sankt-peterburg'?'Санкт-Петербург':d.city==='voronezh'?'Воронеж':'Москва'} · ${id.slice(0,8)}`,text:letter(d,id)});if(!result.accepted?.length)throw Error('SMTP recipient not accepted');});
  const server=http.createServer(handler);server.requestTimeout=30000;server.headersTimeout=15000;server.listen(Number(process.env.PORT||3000),'0.0.0.0',()=>console.log('Lead service ready'));
 }
