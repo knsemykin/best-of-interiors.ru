@@ -14,3 +14,7 @@ Framework: Astro / static site. Node 24. Install: npm ci. Build: npm run build. 
 Preview intentionally has `noindex, follow`. Remove only after approval, factual content verification and production domain configuration. Then enable sitemap, add Yandex Webmaster / Google Search Console and verify indexing.
 
 Assets are generated concepts, not evidence of actual company projects. Originals in assets/source; optimized responsive WebP in public/images. Local Manrope font via @fontsource-variable, no third-party runtime dependencies.
+
+## Forms (2026-11-19)
+
+All form types share `src/scripts/form-submit.ts` and send to FormToMail. The service cabinet controls recipients: pro.growthleads@gmail.com; no Telegram recipients. The sending key is public by the provider’s documented design. Success requires HTTP success and `statusCode: 200`. Test with `node --test tests/form-submit.test.mjs`. The former Yandex/SMTP handler is not called by current pages.

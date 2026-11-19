@@ -6,9 +6,7 @@ if(form){
  form.addEventListener('reset',()=>{if(!sending)requestId=crypto.randomUUID();document.querySelector('#email-draft')?.remove();});
  form.addEventListener('lead:submit',async(event)=>{
   if(sending)return;
-  const endpoint=form.dataset.endpoint;
   const error=document.querySelector<HTMLElement>('#form-error')!;
-  if(!endpoint){error.textContent='Приём заявок скоро откроется. Напишите нам: hello@best-of-interiors.ru.';return;}
   const selected=(event as CustomEvent<{selected?:string[]}>).detail?.selected||[];
   // Earlier quiz steps are disabled only for browser validation; include their answers.
   const disabled=[...form.querySelectorAll<HTMLFieldSetElement>('fieldset:disabled')];disabled.forEach(f=>f.disabled=false);

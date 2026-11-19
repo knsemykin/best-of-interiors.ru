@@ -1,3 +1,5 @@
+> Legacy SMTP service: the website no longer calls this service as of 2026-11-19. Current forms use FormToMail directly; delivery is configured to pro.growthleads@gmail.com in the FormToMail cabinet. Retained for historical reference only.
+
 # Lead email service
 
 Recipient is fixed to hello@best-of-interiors.ru. SMTP credentials are server-side only.
